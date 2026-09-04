@@ -1,0 +1,14 @@
+# Arquivos gerados pelo Code::Blocks
+bin/
+obj/
+
+# Arquivos de saída/execução
+output/
+
+# Configurações pessoais do Code::Blocks
+*.layout
+
+# Arquivos compilados C++
+*.o
+*.out
+*.exe
