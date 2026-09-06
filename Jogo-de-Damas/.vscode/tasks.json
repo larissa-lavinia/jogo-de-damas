@@ -1,0 +1,33 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build Jogo de Damas",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+                "-Wall",
+                "-Wextra",
+                "-g3",
+                "main.cpp",
+                "-I./raylib/include",
+                "-L./raylib/lib/linux",
+                "-lraylib",
+                "-lX11",
+                "-lpthread",
+                "-ldl",
+                "-lm",
+                "-lrt",
+                "-o",
+                "output/main"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        }
+    ]
+}
