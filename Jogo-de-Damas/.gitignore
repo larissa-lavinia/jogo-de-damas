@@ -1,14 +1,11 @@
-# Arquivos gerados pelo Code::Blocks
+# Arquivos gerados pela compilação
 bin/
 obj/
-
-# Arquivos de saída/execução
 output/
 
-# Configurações pessoais do Code::Blocks
+# Configurações locais do Code::Blocks
 *.layout
 
-# Arquivos compilados C++
-*.o
-*.out
-*.exe
+# VS Code - ignorar tudo, exceto configurações necessárias
+.vscode/*
+!.vscode/tasks.json
