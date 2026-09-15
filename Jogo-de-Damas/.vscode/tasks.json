@@ -2,24 +2,62 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "Criar Pasta Output",
+            "type": "cppbuild",
+            "command": "cmd.exe",
+            "windows": {
+                "command": "cmd.exe",
+                "args": ["/c", "if not exist output mkdir output"]
+            },
+            "linux": {
+                "command": "mkdir",
+                "args": ["-p", "output"]
+            }
+        },
+        {
             "label": "Build Jogo de Damas",
-            "type": "shell",
+            "type": "cppbuild",
             "command": "g++",
-            "args": [
-                "-Wall",
-                "-Wextra",
-                "-g3",
-                "main.cpp",
-                "-I./raylib/include",
-                "-L./raylib/lib/linux",
-                "-lraylib",
-                "-lX11",
-                "-lpthread",
-                "-ldl",
-                "-lm",
-                "-lrt",
-                "-o",
-                "output/main"
+            "windows": {
+                "args": [
+                    "-Wall",
+                    "-Wextra",
+                    "-g3",
+                    "main.cpp",
+                    "-I./raylib/include",
+                    "-I./movimentos",
+                    "-I./tabuleiro",
+                    "-L./raylib/lib/windows",
+                    "-lraylib",
+                    "-lopengl32",
+                    "-lgdi32",
+                    "-lwinmm",
+                    "-o",
+                    "output/main.exe"
+                ]
+            },
+            "linux": {
+                "args": [
+                    "-Wall",
+                    "-Wextra",
+                    "-g3",
+                    "main.cpp",
+                    "-I./raylib/include",
+                    "-I./movimentos",
+                    "-I./tabuleiro",
+                    "-L./raylib/lib/linux",
+                    "-lraylib",
+                    "-lX11",
+                    "-lpthread",
+                    "-ldl",
+                    "-lm",
+                    "-lrt",
+                    "-o",
+                    "output/main"
+                ]
+            },
+            "dependsOn": [
+                "Criar Pasta Output"
             ],
             "group": {
                 "kind": "build",
