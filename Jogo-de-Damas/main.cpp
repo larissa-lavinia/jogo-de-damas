@@ -1,20 +1,48 @@
 #include <raylib.h>
+#include "config/constantes.h"
+
+#include "usuario.h"
+#include "screen/login.cpp"
+#include "screen/inicio.cpp"
+#include "screen/cadastro.cpp"
+
+enum class OpcaoInicio
+{
+    SAIR = 0,
+    CADASTRO = 1,
+    LOGIN = 2
+};
 
 int main()
 {
-    InitWindow(800, 450, "Jogo de Damas");
+    InitWindow(
+        Constantes::Tela::LARGURA,
+        Constantes::Tela::ALTURA,
+        Constantes::Tela::TITULO
+    );
 
-    SetTargetFPS(60);
+    SetTargetFPS(Constantes::Tela::FPS);
 
-    while (!WindowShouldClose())
+    bool executando = true;
+
+    while (executando && !WindowShouldClose())
     {
-        BeginDrawing();
+        OpcaoInicio opcao = static_cast<OpcaoInicio>(inicio());
 
-        ClearBackground(RAYWHITE);
+        if (opcao == OpcaoInicio::CADASTRO)
+        {
+            telaCadastro();
+        }
 
-        DrawText("Jogo de Damas", 250, 200, 30, BLACK);
+        if (opcao == OpcaoInicio::LOGIN)
+        {
+            telaLogin();
+        }
 
-        EndDrawing();
+        if (opcao == OpcaoInicio::SAIR)
+        {
+            executando = false;
+        }
     }
 
     CloseWindow();
