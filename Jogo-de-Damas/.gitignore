@@ -5,6 +5,7 @@ output/
 
 # Configurações locais do Code::Blocks
 *.layout
+*.depend
 
 # VS Code - ignorar tudo, exceto configurações necessárias
 .vscode/*
