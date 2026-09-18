@@ -7,16 +7,11 @@ using namespace std;
 
 enum class AcaoTelaLogin
 {
-    VOLTAR
+    VOLTAR,
+    ENTRAR_MENU
 };
 
-bool verificarLogin(string nickname, string senha)
-{
-    // TODO: implementar consulta dos usuarios cadastrados
-    return false;
-}
-
-AcaoTelaLogin telaLogin()
+AcaoTelaLogin telaLogin(string& usuarioLogado)
 {
     string nickname = "";
     string senha = "";
@@ -136,10 +131,8 @@ AcaoTelaLogin telaLogin()
                 {
                     if (verificarLogin(nickname, senha))
                     {
-                        mensagem = "Login realizado com sucesso!";
-
-                        nickname = "";
-                        senha = "";
+                        usuarioLogado = nickname;
+                        return AcaoTelaLogin::ENTRAR_MENU;
                     }
                     else
                     {

@@ -15,5 +15,5 @@ struct Usuario
 string salvarUsuario(Usuario usuario);
 void listarUsuarios();
 bool nicknameExiste(string nickname);
-
+bool verificarLogin(string nickname, string senha);
 #endif
