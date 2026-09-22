@@ -9,4 +9,9 @@ output/
 
 # VS Code - ignorar tudo, exceto configurações necessárias
 .vscode/*
+<<<<<<< HEAD
 !.vscode/tasks.json
+=======
+!.vscode/tasks.json
+!.vscode/launch.json
+>>>>>>> 41b1d67fe104db84b3a6ffda9bf3870ea78603a3
