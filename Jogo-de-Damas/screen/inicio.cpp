@@ -1,4 +1,5 @@
 #include <raylib.h>
+#include "inicio.h"
 
 int inicio()
 {

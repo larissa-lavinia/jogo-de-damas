@@ -2,13 +2,9 @@
 #include <string>
 
 #include "../usuario.h"
+#include "cadastro.h"
 
 using namespace std;
-
-enum class AcaoTelaCadastro
-{
-    VOLTAR
-};
 
 AcaoTelaCadastro telaCadastro()
 {

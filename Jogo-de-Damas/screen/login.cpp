@@ -1,14 +1,13 @@
 #include <raylib.h>
 #include <string>
+#include "../usuario.h"
+#include "login.h"
+
+using namespace std;
 
 #include "../usuario.h"
 
 using namespace std;
-
-enum class AcaoTelaLogin
-{
-    VOLTAR
-};
 
 bool verificarLogin(string nickname, string senha)
 {

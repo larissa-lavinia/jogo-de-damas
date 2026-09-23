@@ -2,9 +2,10 @@
 #include "config/constantes.h"
 
 #include "usuario.h"
-#include "screen/login.cpp"
-#include "screen/inicio.cpp"
-#include "screen/cadastro.cpp"
+
+#include "screen/login.h"
+#include "screen/inicio.h"
+#include "screen/cadastro.h"
 
 enum class OpcaoInicio
 {
