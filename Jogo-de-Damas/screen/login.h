@@ -1,11 +1,12 @@
 #pragma once
 
 #include <string>
+using namespace std;
 
 enum class AcaoTelaLogin
 {
     VOLTAR
 };
 
-bool verificarLogin(std::string nickname, std::string senha);
+bool verificarLogin(string nickname, string senha);
 AcaoTelaLogin telaLogin();

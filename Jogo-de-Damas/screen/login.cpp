@@ -5,9 +5,6 @@
 
 using namespace std;
 
-#include "../usuario.h"
-
-using namespace std;
 
 bool verificarLogin(string nickname, string senha)
 {

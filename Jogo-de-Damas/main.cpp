@@ -14,8 +14,7 @@ enum class OpcaoInicio
     LOGIN = 2
 };
 
-int main()
-{
+int main(){
     InitWindow(
         Constantes::Tela::LARGURA,
         Constantes::Tela::ALTURA,
