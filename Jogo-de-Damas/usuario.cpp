@@ -1,6 +1,7 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <cstring>
 
 #include "usuario.h"
 #include "config/constantes.h"
@@ -28,26 +29,40 @@ string salvarUsuario(Usuario usuario)
         return "Erro ao tentar salvar usuario!";
     }
 
+    char nickname[TAMANHO_NICKNAME] = {};
+    char senha[TAMANHO_SENHA] = {};
+
+    strncpy(
+        nickname,
+        usuario.nickname.c_str(),
+        TAMANHO_NICKNAME - 1
+    );
+
+    strncpy(
+        senha,
+        usuario.senha.c_str(),
+        TAMANHO_SENHA - 1
+    );
+
     arquivo.write(
         (char*)&usuario.id,
         sizeof(usuario.id)
     );
 
     arquivo.write(
-        usuario.nickname.c_str(),
-        TAMANHO_NICKNAME
+        nickname,
+        sizeof(nickname)
     );
 
     arquivo.write(
-        usuario.senha.c_str(),
-        TAMANHO_SENHA
+        senha,
+        sizeof(senha)
     );
 
     arquivo.close();
 
     return "Usuario cadastrado com sucesso!";
 }
-
 
 void listarUsuarios()
 {
@@ -92,7 +107,6 @@ void listarUsuarios()
     arquivo.close();
 }
 
-
 bool nicknameExiste(string nickname)
 {
     ifstream arquivo(
@@ -114,8 +128,8 @@ bool nicknameExiste(string nickname)
             sizeof(usuario.id)
         );
 
-        char nicknameArquivo[TAMANHO_NICKNAME];
-        char senhaArquivo[TAMANHO_SENHA];
+        char nicknameArquivo[TAMANHO_NICKNAME] = {};
+        char senhaArquivo[TAMANHO_SENHA] = {};
 
         arquivo.read(
             nicknameArquivo,
@@ -134,6 +148,60 @@ bool nicknameExiste(string nickname)
             if (usuario.nickname == nickname)
             {
                 arquivo.close();
+                return true;
+            }
+        }
+    }
+
+    arquivo.close();
+
+    return false;
+}
+
+bool verificarLogin(string nickname, string senha)
+{
+    ifstream arquivo(
+        Constantes::Db::ARQUIVO_USUARIO,
+        ios::binary
+    );
+
+    if (!arquivo)
+    {
+        return false;
+    }
+
+    while (arquivo)
+    {
+        int id;
+
+        char nicknameArquivo[TAMANHO_NICKNAME] = {};
+        char senhaArquivo[TAMANHO_SENHA] = {};
+
+        arquivo.read(
+            (char*)&id,
+            sizeof(id)
+        );
+
+        arquivo.read(
+            nicknameArquivo,
+            TAMANHO_NICKNAME
+        );
+
+        arquivo.read(
+            senhaArquivo,
+            TAMANHO_SENHA
+        );
+
+        if (arquivo)
+        {
+            string nicknameSalvo = nicknameArquivo;
+            string senhaSalva = senhaArquivo;
+
+            if (nicknameSalvo == nickname &&
+                senhaSalva == senha)
+            {
+                arquivo.close();
+
                 return true;
             }
         }

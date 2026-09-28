@@ -1,73 +1,120 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_project_file>
-    <FileVersion major="1" minor="6" />
+	<FileVersion major="1" minor="6" />
 
-    <Project>
-        <Option title="Jogo-de-Damas" />
-        <Option pch_mode="2" />
-        <Option compiler="gcc" />
+	<Project>
+		<Option title="Jogo-de-Damas" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
 
-        <Build>
+		<Build>
 
-            <Target title="Debug">
-                <Option output="bin/Debug/Jogo-de-Damas" prefix_auto="1" extension_auto="1" />
-                <Option object_output="obj/Debug/" />
-                <Option type="1" />
-                <Option compiler="gcc" />
+			<!-- ================================================== -->
+			<!-- DEBUG - WINDOWS                                   -->
+			<!-- ================================================== -->
 
-                <Compiler>
-                    <Add option="-g" />
-                    <Add option="-std=gnu++17" />
-                </Compiler>
-            </Target>
+			<Target title="Debug">
+				<Option output="bin/Debug/Jogo-de-Damas.exe" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
 
-            <Target title="Release">
-                <Option output="bin/Release/Jogo-de-Damas" prefix_auto="1" extension_auto="1" />
-                <Option object_output="obj/Release/" />
-                <Option type="1" />
-                <Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-std=gnu++17" />
+				</Compiler>
 
-                <Compiler>
-                    <Add option="-O2" />
-                    <Add option="-std=gnu++17" />
-                </Compiler>
+				<Linker>
+					<!-- WINDOWS -->
+					<Add directory="config/raylib/lib/windows" />
+					<Add library="raylib" />
+					<Add library="opengl32" />
+					<Add library="gdi32" />
+					<Add library="winmm" />
 
-                <Linker>
-                    <Add option="-s" />
-                </Linker>
-            </Target>
+					<!--
+					==================================================
+					LINUX - DESCOMENTE AO COMPILAR NO LINUX
 
-        </Build>
+					<Add directory="config/raylib/lib/linux" />
+					<Add library="raylib" />
+					<Add library="X11" />
+					<Add library="pthread" />
+					<Add library="dl" />
+					<Add library="m" />
+					<Add library="rt" />
 
-        <!-- Configuração geral do compilador -->
-        <Compiler>
-            <Add option="-Wall" />
-            <Add option="-fexceptions" />
-            <Add option="-std=gnu++17" />
+					==================================================
+					-->
+				</Linker>
+			</Target>
 
-            <!-- Raylib dentro do projeto -->
-            <Add directory="config/raylib/include" />
-        </Compiler>
 
-        <!-- Configuração geral do linker -->
-        <Linker>
+			<!-- ================================================== -->
+			<!-- RELEASE - WINDOWS                                 -->
+			<!-- ================================================== -->
 
-            <!-- Raylib compilado dentro do projeto -->
-            <Add library="raylib" />
-            <Add directory="config/raylib/lib/linux" />
+			<Target title="Release">
+				<Option output="bin/Release/Jogo-de-Damas.exe" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
 
-            <!-- Dependências do Raylib no Linux -->
-            <Add library="X11" />
-            <Add library="pthread" />
-            <Add library="dl" />
-            <Add library="m" />
-            <Add library="rt" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-std=gnu++17" />
+				</Compiler>
 
-        </Linker>
+				<Linker>
+					<Add option="-s" />
 
-        <Unit filename="main.cpp" />
+					<!-- WINDOWS -->
+					<Add directory="config/raylib/lib/windows" />
+					<Add library="raylib" />
+					<Add library="opengl32" />
+					<Add library="gdi32" />
+					<Add library="winmm" />
 
-        <Extensions />
+					<!--
+					==================================================
+					LINUX - DESCOMENTE AO COMPILAR NO LINUX
 
-    </Project>
+					<Add directory="config/raylib/lib/linux" />
+					<Add library="raylib" />
+					<Add library="X11" />
+					<Add library="pthread" />
+					<Add library="dl" />
+					<Add library="m" />
+					<Add library="rt" />
+
+					==================================================
+					-->
+				</Linker>
+			</Target>
+
+		</Build>
+
+
+		<!-- ================================================== -->
+		<!-- CONFIGURAÇÕES GERAIS DO COMPILADOR                 -->
+		<!-- ================================================== -->
+
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+			<Add option="-std=gnu++17" />
+			<Add directory="config/raylib/include" />
+		</Compiler>
+
+
+		<!-- ================================================== -->
+		<!-- ARQUIVOS DO PROJETO                                -->
+		<!-- ================================================== -->
+
+		<Unit filename="main.cpp" />
+		<Unit filename="usuario.cpp" />
+
+		<Extensions />
+
+	</Project>
 </CodeBlocks_project_file>
