@@ -1,4 +1,6 @@
 #include <raylib.h>
+#include "game/movimentos.h"
+
 #include "config/constantes.h"
 
 #include "usuario.h"
@@ -46,6 +48,8 @@ int main()
     }
 
     CloseWindow();
+
+    exibirTabuleiro(tabuleiro);
 
     return 0;
 }
