@@ -1,5 +1,5 @@
 #include <raylib.h>
-#include "game/movimentos.h"
+#include "damas/movimentos.h"
 
 #include "config/constantes.h"
 
@@ -23,6 +23,8 @@ int main()
         Constantes::Tela::TITULO
     );
 
+    string lll = "aldsldklsd";
+
     SetTargetFPS(Constantes::Tela::FPS);
 
     bool executando = true;
@@ -38,7 +40,7 @@ int main()
 
         if (opcao == OpcaoInicio::LOGIN)
         {
-            telaLogin();
+            telaLogin(lll); // tá dando erro, vou colocar qualquer coisa, qual é o parâmetro?
         }
 
         if (opcao == OpcaoInicio::SAIR)
@@ -48,6 +50,8 @@ int main()
     }
 
     CloseWindow();
+
+    inicializarTabuleiro(tabuleiro);
 
     exibirTabuleiro(tabuleiro);
 
