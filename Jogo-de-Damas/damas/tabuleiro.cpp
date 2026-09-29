@@ -1,8 +1,13 @@
 // Não sei se o tipo de arquivo tá certo
 // Talvez tenha que colar no .h ou criar um .hpp
 #include <stdio.h>
+#include <iostream>
 #include "tabuleiro.h"
 #include "peca (1).h"
+using namespace std;
+
+peca tabuleiro[TABTAM][TABTAM];
+
 
 void inicializarTabuleiro(peca tabuleiro[TABTAM][TABTAM]){ // Verificar se essa passagem de tabuleiro/matriz está correta
     //Inicializar tabuleiro
@@ -30,4 +35,21 @@ void inicializarTabuleiro(peca tabuleiro[TABTAM][TABTAM]){ // Verificar se essa 
         }
 }
 
-// Apaguei a função imprimir tabuleiro, por que era só uma verificação de
+void exibirTabuleiro(peca tabuleiro[TABTAM][TABTAM])
+{
+    cout << "  0 1 2 3 4 5 6 7" << endl;
+
+    for (int i = 0; i < TABTAM; i++){
+        cout << i << " ";
+
+        for (int j = 0; j < TABTAM; j++){
+            if (tabuleiro[i][j].ocupada){
+                cout << caracterePeca(tabuleiro[i][j]) << " ";
+            }
+            else{
+                cout << "  ";
+            }
+        }
+        cout << endl;
+    }
+}

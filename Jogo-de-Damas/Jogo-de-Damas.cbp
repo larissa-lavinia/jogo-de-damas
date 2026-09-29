@@ -43,6 +43,7 @@
 			<Add library="winmm" />
 			<Add directory="config/raylib/include" />
 		</Linker>
+		<Unit filename="damas/jogo.cpp" />
 		<Unit filename="damas/movimentos.cpp" />
 		<Unit filename="damas/movimentos.h" />
 		<Unit filename="damas/peca (1).cpp" />

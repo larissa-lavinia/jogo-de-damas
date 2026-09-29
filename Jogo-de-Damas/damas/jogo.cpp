@@ -1,11 +1,11 @@
 #include <iostream>
 using namespace std;
 
-#include "peca.h"
+#include "peca (1).h"
 #include "movimentos.h"
 #include "tabuleiro.h"
 
-int main (){
+void iniciarJogo() {
     int linhaInicial, colunaInicial, linhaFinal, colunaFinal;
 
     inicializarTabuleiro(tabuleiro);
@@ -54,7 +54,4 @@ int main (){
 
         exibirTabuleiro(tabuleiro);
     }
-
-
-    return 0;
 }

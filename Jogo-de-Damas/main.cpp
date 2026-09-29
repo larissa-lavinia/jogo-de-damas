@@ -2,6 +2,7 @@
 #include "damas/movimentos.h"
 #include "damas/peca (1).h"
 #include "damas/tabuleiro.h"
+#include "damas/jogo.h"
 
 #include "config/constantes.h"
 
@@ -56,6 +57,8 @@ int main()
 //    inicializarTabuleiro(peca tabuleiro);
 //
 //    exibirTabuleiro(peca tabuleiro);
+
+    iniciarJogo();
 
     return 0;
 }

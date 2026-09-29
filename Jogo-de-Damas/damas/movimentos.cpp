@@ -6,6 +6,14 @@
 #include "peca (1).h"
 // o código usa as variaveis globais declaradas em tabuleiro.
 
+void moverPeca(peca tabuleiro[TABTAM][TABTAM], int linhaInicial, int colunaInicial, int linhaFinal, int colunaFinal){
+    tabuleiro[linhaFinal][colunaFinal].cor = tabuleiro[linhaInicial][colunaInicial].cor;
+    tabuleiro[linhaFinal][colunaFinal].tipo = tabuleiro[linhaInicial][colunaInicial].tipo;
+    tabuleiro[linhaFinal][colunaFinal].ocupada = true;
+
+    tabuleiro[linhaInicial][colunaInicial].ocupada = false;
+}
+
 bool podeMoverSimples(peca tabuleiro[TABTAM][TABTAM], int linhaInicial, int colunaInicial, int linhaFinal, int colunaFinal){
     // Linha e coluna iniciais seriam a que a peça está no momento que pede a validação
     // Já as finais é pra onde a peça irá depois
