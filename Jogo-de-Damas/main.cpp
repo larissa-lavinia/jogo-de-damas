@@ -1,5 +1,7 @@
 #include <raylib.h>
 #include "damas/movimentos.h"
+#include "damas/peca (1).h"
+#include "damas/tabuleiro.h"
 
 #include "config/constantes.h"
 
@@ -7,6 +9,7 @@
 #include "screen/login.cpp"
 #include "screen/inicio.cpp"
 #include "screen/cadastro.cpp"
+
 
 enum class OpcaoInicio
 {
@@ -17,13 +20,12 @@ enum class OpcaoInicio
 
 int main()
 {
+    string NAME = "NAME";
     InitWindow(
         Constantes::Tela::LARGURA,
         Constantes::Tela::ALTURA,
         Constantes::Tela::TITULO
     );
-
-    string lll = "aldsldklsd";
 
     SetTargetFPS(Constantes::Tela::FPS);
 
@@ -40,7 +42,7 @@ int main()
 
         if (opcao == OpcaoInicio::LOGIN)
         {
-            telaLogin(lll); // tá dando erro, vou colocar qualquer coisa, qual é o parâmetro?
+            telaLogin(NAME); // tá dando erro, vou colocar qualquer coisa, qual é o parâmetro?
         }
 
         if (opcao == OpcaoInicio::SAIR)
@@ -51,9 +53,9 @@ int main()
 
     CloseWindow();
 
-    inicializarTabuleiro(tabuleiro);
-
-    exibirTabuleiro(tabuleiro);
+//    inicializarTabuleiro(peca tabuleiro);
+//
+//    exibirTabuleiro(peca tabuleiro);
 
     return 0;
 }

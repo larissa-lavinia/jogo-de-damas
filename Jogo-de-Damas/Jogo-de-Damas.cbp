@@ -37,18 +37,21 @@
 			<Add directory="config/raylib/include" />
 		</Compiler>
 		<Linker>
-			<Add library="raylib" />
-			<Add library="X11" />
-			<Add library="pthread" />
-			<Add library="dl" />
-			<Add library="m" />
-			<Add library="rt" />
-			<Add directory="config/raylib/lib/linux" />
+			<Add library="config/raylib/lib/windows/libraylib.a" />
+			<Add library="opengl32" />
+			<Add library="gdi32" />
+			<Add library="winmm" />
+			<Add directory="config/raylib/include" />
 		</Linker>
-		<Unit filename="game/movimentos.cpp" />
-		<Unit filename="game/movimentos.h" />
-		<Unit filename="game/tabuleiro.cpp" />
+		<Unit filename="damas/movimentos.cpp" />
+		<Unit filename="damas/movimentos.h" />
+		<Unit filename="damas/peca (1).cpp" />
+		<Unit filename="damas/peca (1).h" />
+		<Unit filename="damas/tabuleiro.cpp" />
+		<Unit filename="damas/tabuleiro.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="usuario.cpp" />
+		<Unit filename="usuario.h" />
 		<Extensions />
 	</Project>
 </CodeBlocks_project_file>

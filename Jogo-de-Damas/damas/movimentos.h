@@ -1,8 +1,8 @@
 #pragma once
 #include "tabuleiro.h"
 
-bool podeMoverSimples(int tabuleiro[TABTAM][TABTAM], int linhaInicial, int colunaInicial, int linhaFinal, int colunaFinal);
+bool podeMoverSimples(peca tabuleiro[TABTAM][TABTAM], peca linhaInicial, peca colunaInicial, peca linhaFinal, peca colunaFinal);
 
-bool podeCapturar(int tabuleiro[TABTAM][TABTAM], int linhaInicial, int colunaInicial, int linhaFinal, int colunaFinal);
+bool podeCapturar(peca tabuleiro[TABTAM][TABTAM], peca linhaInicial, peca colunaInicial, peca linhaFinal, peca colunaFinal);
 
-bool validarJogada(int tabuleiro[TABTAM][TABTAM], int linhaInicial, int colunaInicial, int linhaFinal, int colunaFinal);
+bool validarJogada(peca tabuleiro[TABTAM][TABTAM], peca linhaInicial, peca colunaInicial, peca linhaFinal, peca colunaFinal);
