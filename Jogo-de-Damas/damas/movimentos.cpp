@@ -1,119 +1,340 @@
-//lembrar de modificar os .hpp
-
-#include <cmath>
-#include "tabuleiro.h" //por isso acho que talvez as funções do tabuleiro devem estar no .h
 #include "movimentos.h"
-#include "peca (1).h"
-// o código usa as variaveis globais declaradas em tabuleiro.
+#include <cmath>
 
-void moverPeca(peca tabuleiro[TABTAM][TABTAM], int linhaInicial, int colunaInicial, int linhaFinal, int colunaFinal){
-    tabuleiro[linhaFinal][colunaFinal].cor = tabuleiro[linhaInicial][colunaInicial].cor;
-    tabuleiro[linhaFinal][colunaFinal].tipo = tabuleiro[linhaInicial][colunaInicial].tipo;
+void moverPeca(
+    peca tabuleiro[TABTAM][TABTAM],
+    int linhaInicial,
+    int colunaInicial,
+    int linhaFinal,
+    int colunaFinal
+)
+{
+    // Guarda os dados da peça que está sendo movida
+    Cor corPeca =
+        tabuleiro[linhaInicial][colunaInicial].cor;
+
+    TipoPeca tipoPeca =
+        tabuleiro[linhaInicial][colunaInicial].tipo;
+
+    // Verifica se é uma captura
+    bool captura =
+        abs(linhaFinal - linhaInicial) >= 2 &&
+        abs(colunaFinal - colunaInicial) >= 2;
+
+    // =====================================================
+    // SE FOR CAPTURA, ENCONTRA A PEÇA NO CAMINHO
+    // =====================================================
+
+    if (captura)
+    {
+        int diferencaLinha =
+            linhaFinal - linhaInicial;
+
+        int diferencaColuna =
+            colunaFinal - colunaInicial;
+
+        int direcaoLinha =
+            (diferencaLinha > 0) ? 1 : -1;
+
+        int direcaoColuna =
+            (diferencaColuna > 0) ? 1 : -1;
+
+        int linhaAtual =
+            linhaInicial + direcaoLinha;
+
+        int colunaAtual =
+            colunaInicial + direcaoColuna;
+
+        while (linhaAtual != linhaFinal &&
+               colunaAtual != colunaFinal)
+        {
+            if (tabuleiro[linhaAtual][colunaAtual].ocupada)
+            {
+                // Remove a peça capturada
+                tabuleiro[linhaAtual][colunaAtual].ocupada = false;
+
+                break;
+            }
+
+            linhaAtual += direcaoLinha;
+            colunaAtual += direcaoColuna;
+        }
+    }
+
+    // =====================================================
+    // MOVE A PEÇA
+    // =====================================================
+
+    tabuleiro[linhaFinal][colunaFinal].cor = corPeca;
+    tabuleiro[linhaFinal][colunaFinal].tipo = tipoPeca;
     tabuleiro[linhaFinal][colunaFinal].ocupada = true;
 
+    tabuleiro[linhaFinal][colunaFinal].linha =
+        linhaFinal;
+
+    tabuleiro[linhaFinal][colunaFinal].coluna =
+        colunaFinal;
+
+    // Libera a posição antiga
     tabuleiro[linhaInicial][colunaInicial].ocupada = false;
+
+    // =====================================================
+    // PROMOÇÃO
+    // =====================================================
+
+    if (tipoPeca == NORMAL)
+    {
+        if (corPeca == BRANCA && linhaFinal == 7)
+        {
+            tornarDama(tabuleiro[linhaFinal][colunaFinal]);
+        }
+
+        if (corPeca == PRETA && linhaFinal == 0)
+        {
+            tornarDama(tabuleiro[linhaFinal][colunaFinal]);
+        }
+    }
 }
 
-bool podeMoverSimples(peca tabuleiro[TABTAM][TABTAM], int linhaInicial, int colunaInicial, int linhaFinal, int colunaFinal){
-    // Linha e coluna iniciais seriam a que a peça está no momento que pede a validação
-    // Já as finais é pra onde a peça irá depois
-
+bool podeMoverSimples(
+    peca tabuleiro[TABTAM][TABTAM],
+    int linhaInicial,
+    int colunaInicial,
+    int linhaFinal,
+    int colunaFinal
+)
+{
     peca origem = tabuleiro[linhaInicial][colunaInicial];
     peca destino = tabuleiro[linhaFinal][colunaFinal];
 
-    // Se a origem estiver vazia, não tem como o movimento acontecer
-    if (!origem.ocupada) {
+    // A origem precisa ter uma peça
+    if (!origem.ocupada)
+    {
         return false;
     }
 
-    // Destino ocupado?
-    if (destino.ocupada) {
+    // O destino precisa estar vazio
+    if (destino.ocupada)
+    {
         return false;
     }
 
-    // Casa da diagonal (direita ou esquerda) vazia?
-    if (abs(colunaFinal - colunaInicial) != 1) {
-        return false;
-    }
+    int diferencaLinha = linhaFinal - linhaInicial;
+    int diferencaColuna = colunaFinal - colunaInicial;
 
-    // Validação caso seja uma peça normal
-    if (origem.tipo == NORMAL) {
-        if (origem.cor == BRANCA && linhaFinal == linhaInicial + 1) {
+    int distanciaLinha = abs(diferencaLinha);
+    int distanciaColuna = abs(diferencaColuna);
+
+    // =====================================================
+    // PEÇA NORMAL
+    // =====================================================
+
+    if (origem.tipo == NORMAL)
+    {
+        // Movimento simples é exatamente uma casa na diagonal
+        if (distanciaLinha != 1 || distanciaColuna != 1)
+        {
+            return false;
+        }
+
+        // Brancas andam para baixo
+        if (origem.cor == BRANCA &&
+            diferencaLinha == 1)
+        {
             return true;
         }
-        if (origem.cor == PRETA && linhaFinal == linhaInicial - 1) {
+
+        // Pretas andam para cima
+        if (origem.cor == PRETA &&
+            diferencaLinha == -1)
+        {
             return true;
         }
+
         return false;
     }
 
-    // Validação caso seja uma peça dama (Não consegui pensar em como delimitar o movimento, para que impeçaa de passar por cima de alguma peça da mesmas cor)
-    /*if (origem.tipo == DAMA) {
-        if () {
-            return true;
+    // =====================================================
+    // DAMA
+    // =====================================================
+
+    if (origem.tipo == DAMA)
+    {
+        // A dama precisa andar na diagonal
+        if (distanciaLinha != distanciaColuna)
+        {
+            return false;
         }
-    }*/
 
-    return false;
-}
+        // A dama precisa andar pelo menos uma casa
+        if (distanciaLinha == 0)
+        {
+            return false;
+        }
 
-bool podeCapturar(peca tabuleiro[TABTAM][TABTAM], int linhaInicial, int colunaInicial, int linhaFinal, int colunaFinal){
-    int linhaMeio = (linhaFinal + linhaInicial) / 2;
-    int colunaMeio = (colunaFinal + colunaInicial) / 2;
-    // Meio é onde vai estar a peça do adversario, já que na captura "pula duas casas"
+        // Verifica se existe alguma peça no caminho
+        int direcaoLinha =
+            (diferencaLinha > 0) ? 1 : -1;
 
-    peca origem = tabuleiro[linhaInicial][colunaInicial];
-    peca destino = tabuleiro[linhaFinal][colunaFinal];
-    peca meio = tabuleiro[linhaMeio][colunaMeio];
+        int direcaoColuna =
+            (diferencaColuna > 0) ? 1 : -1;
 
-    // Se a origem estiver vazia, não tem como o movimento acontecer
-    if (!origem.ocupada) {
-        return false;
-    }
+        int linhaAtual = linhaInicial + direcaoLinha;
+        int colunaAtual = colunaInicial + direcaoColuna;
 
-    // Destino ocupado?
-    if (destino.ocupada) {
-        return false;
-    }
-
-    // Pulo de 2 casas na diagonal
-    if (abs(linhaFinal - linhaInicial) != 2 || abs(colunaFinal - colunaInicial) != 2) {
-        return false;
-    }
-
-    if(origem.tipo == NORMAL)
-        if (meio.ocupada && meio.cor != origem.cor) {
-            if (origem.tipo == NORMAL) {
-                if (origem.cor == BRANCA && linhaFinal == linhaInicial + 2) return true;
-                if (origem.cor == PRETA && linhaFinal == linhaInicial - 2) return true;
+        while (linhaAtual != linhaFinal &&
+               colunaAtual != colunaFinal)
+        {
+            if (tabuleiro[linhaAtual][colunaAtual].ocupada)
+            {
                 return false;
             }
 
-//            // Dama não tem delimitações de captura (preciso pensar em como fazer essa captura de peças,
-//            // pois não consigo pensar em como verificar se há uma peça intermediária em qualquer diagonal
-//            if (origem.tipo == DAMA){
-//                int j == colunaInicial;
-//                for(int i = linhaInicial; i <= linhaFinal; i++){
-//                    tabuleiro[i][j] ==;
-//                }
-//                return true;
-//            }
+            linhaAtual += direcaoLinha;
+            colunaAtual += direcaoColuna;
         }
+
+        return true;
+    }
 
     return false;
 }
 
-// Verificar se alguma peça do jogador da vez pode realizar um movimento de captura (Função em desenvolvimento)
-/*bool existeCapturaObrigatoria(peca tabuleiro[TABTAM][TABTAM], Cor jogadorAtual) {
-    for (int i = 0; i < TABTAM; i++) {
-        for (int j = 0; j < TABTAM; j++) {
-            if (tabuleiro[i][j].ocupada && tabuleiro[i][j].cor == jogadorAtual) {
-            }
-        }
+bool podeCapturar(
+    peca tabuleiro[TABTAM][TABTAM],
+    int linhaInicial,
+    int colunaInicial,
+    int linhaFinal,
+    int colunaFinal
+)
+{
+    peca origem = tabuleiro[linhaInicial][colunaInicial];
+    peca destino = tabuleiro[linhaFinal][colunaFinal];
+
+    // A origem precisa ter uma peça
+    if (!origem.ocupada)
+    {
+        return false;
     }
 
-    return false; // Não tem nenhuma captura disponível
-}*/
+    // O destino precisa estar vazio
+    if (destino.ocupada)
+    {
+        return false;
+    }
+
+    int diferencaLinha = linhaFinal - linhaInicial;
+    int diferencaColuna = colunaFinal - colunaInicial;
+
+    int distanciaLinha = abs(diferencaLinha);
+    int distanciaColuna = abs(diferencaColuna);
+
+    // A jogada precisa ser diagonal
+    if (distanciaLinha != distanciaColuna)
+    {
+        return false;
+    }
+
+    // Não pode ficar na mesma posição
+    if (distanciaLinha == 0)
+    {
+        return false;
+    }
+
+    // =====================================================
+    // PEÇA NORMAL
+    // =====================================================
+
+    if (origem.tipo == NORMAL)
+    {
+        // Uma peça normal captura pulando exatamente
+        // duas casas na diagonal.
+        if (distanciaLinha != 2)
+        {
+            return false;
+        }
+
+        int linhaMeio =
+            (linhaInicial + linhaFinal) / 2;
+
+        int colunaMeio =
+            (colunaInicial + colunaFinal) / 2;
+
+        peca meio = tabuleiro[linhaMeio][colunaMeio];
+
+        // Precisa existir uma peça adversária no meio
+        if (!meio.ocupada)
+        {
+            return false;
+        }
+
+        if (meio.cor == origem.cor)
+        {
+            return false;
+        }
+
+        // IMPORTANTE:
+        // Não verificamos mais a direção.
+        //
+        // Portanto:
+        // BRANCA pode capturar para frente ou para trás.
+        // PRETA pode capturar para frente ou para trás.
+
+        return true;
+    }
+
+    // =====================================================
+    // DAMA
+    // =====================================================
+
+    if (origem.tipo == DAMA)
+    {
+        int direcaoLinha =
+            (diferencaLinha > 0) ? 1 : -1;
+
+        int direcaoColuna =
+            (diferencaColuna > 0) ? 1 : -1;
+
+        int linhaAtual =
+            linhaInicial + direcaoLinha;
+
+        int colunaAtual =
+            colunaInicial + direcaoColuna;
+
+        int quantidadePecas = 0;
+
+        // Percorre todas as casas entre origem e destino
+        while (linhaAtual != linhaFinal &&
+               colunaAtual != colunaFinal)
+        {
+            if (tabuleiro[linhaAtual][colunaAtual].ocupada)
+            {
+                // Se for nossa própria peça,
+                // a dama não pode passar por ela.
+                if (tabuleiro[linhaAtual][colunaAtual].cor == origem.cor)
+                {
+                    return false;
+                }
+
+                quantidadePecas++;
+            }
+
+            linhaAtual += direcaoLinha;
+            colunaAtual += direcaoColuna;
+        }
+
+        // Para uma captura válida precisa existir
+        // exatamente UMA peça adversária no caminho.
+        if (quantidadePecas != 1)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    return false;
+}
 
 bool validarJogada(peca tabuleiro[TABTAM][TABTAM], int linhaInicial, int colunaInicial, int linhaFinal, int colunaFinal){
     if (podeCapturar(tabuleiro, linhaInicial, colunaInicial, linhaFinal, colunaFinal))
@@ -123,4 +344,3 @@ bool validarJogada(peca tabuleiro[TABTAM][TABTAM], int linhaInicial, int colunaI
 
     return false;
 }
-//Essa função parece ser redundante

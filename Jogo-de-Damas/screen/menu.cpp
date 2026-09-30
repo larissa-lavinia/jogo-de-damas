@@ -1,17 +1,11 @@
 #include <raylib.h>
 #include <string>
 
+#include "menu.h"
+
 using namespace std;
 
-enum class AcaoMenu
-{
-    NOVA_PARTIDA,
-    CONTINUAR_PARTIDA,
-    HISTORICO,
-    DESLOGAR
-};
-
-AcaoMenu menu(string usuarioLogado)
+AcaoMenu menu(const string& usuarioLogado)
 {
     while (!WindowShouldClose())
     {

@@ -1,15 +1,10 @@
 #include <raylib.h>
 #include <string>
 
-#include "../usuario.h"
+#include "login.h"
+#include "../usuario/usuario.h"
 
 using namespace std;
-
-enum class AcaoTelaLogin
-{
-    VOLTAR,
-    ENTRAR_MENU
-};
 
 AcaoTelaLogin telaLogin(string& usuarioLogado)
 {

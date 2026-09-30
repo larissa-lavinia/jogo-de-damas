@@ -1,57 +1,61 @@
-#include <iostream>
-using namespace std;
+#include "jogo.h"
 
-#include "peca (1).h"
 #include "movimentos.h"
 #include "tabuleiro.h"
 
-void iniciarJogo() {
-    int linhaInicial, colunaInicial, linhaFinal, colunaFinal;
-
+void iniciarPartida()
+{
     inicializarTabuleiro(tabuleiro);
-    exibirTabuleiro(tabuleiro);
+}
 
-    while (true)
+bool realizarJogada(
+    int linhaInicial,
+    int colunaInicial,
+    int linhaFinal,
+    int colunaFinal,
+    Cor jogador
+)
+{
+    // Verifica se as posições estão dentro do tabuleiro
+    if (linhaInicial < 0 || linhaInicial >= TABTAM ||
+        colunaInicial < 0 || colunaInicial >= TABTAM ||
+        linhaFinal < 0 || linhaFinal >= TABTAM ||
+        colunaFinal < 0 || colunaFinal >= TABTAM)
     {
-        cout << endl;
-
-        //por enquanto, pra sair do loop digitar -1 no prieiro linha
-        cout << "qual peca deseja mover \n";
-        cout << "[linha]: ";
-        cin >> linhaInicial;
-
-        if (linhaInicial==-1){
-            break;
-        }
-
-        cout << "[coluna]: ";
-        cin >> colunaInicial;
-
-        cout << endl;
-
-        cout << "para onde deseja mover: \n";
-        cout << "[linha]: ";
-        cin >> linhaFinal;
-        cout << "[coluna]: ";
-        cin >> colunaFinal;
-
-        //se o usuario digitar algo que nao � numero
-         if (cin.fail()){
-            cin.clear(); //limpa estado de erro do cin
-            break;
-         }
-
-        cout << endl;
-
-        if (podeMoverSimples(tabuleiro, linhaInicial, colunaInicial, linhaFinal, colunaFinal)){
-            moverPeca(tabuleiro, linhaInicial, colunaInicial, linhaFinal, colunaFinal);
-        }
-        else {
-            cout << "movimento invalido!" << endl;
-        }
-
-        cout << endl;
-
-        exibirTabuleiro(tabuleiro);
+        return false;
     }
+
+    // Verifica se existe uma peça na posição inicial
+    if (!tabuleiro[linhaInicial][colunaInicial].ocupada)
+    {
+        return false;
+    }
+
+    // Verifica se a peça pertence ao jogador da vez
+    if (tabuleiro[linhaInicial][colunaInicial].cor != jogador)
+    {
+        return false;
+    }
+
+    // Verifica se o movimento segue as regras
+    if (!validarJogada(
+            tabuleiro,
+            linhaInicial,
+            colunaInicial,
+            linhaFinal,
+            colunaFinal))
+    {
+        return false;
+    }
+
+    // Executa o movimento
+    moverPeca(
+        tabuleiro,
+        linhaInicial,
+        colunaInicial,
+        linhaFinal,
+        colunaFinal
+    );
+
+    return true;
 }

@@ -4,7 +4,7 @@
 #include <cstring>
 
 #include "usuario.h"
-#include "config/constantes.h"
+#include "../config/constantes.h"
 
 using namespace std;
 

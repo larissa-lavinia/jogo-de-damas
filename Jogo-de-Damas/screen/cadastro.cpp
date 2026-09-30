@@ -1,14 +1,10 @@
 #include <raylib.h>
 #include <string>
 
-#include "../usuario.h"
+#include "cadastro.h"
+#include "../usuario/usuario.h"
 
 using namespace std;
-
-enum class AcaoTelaCadastro
-{
-    VOLTAR
-};
 
 AcaoTelaCadastro telaCadastro()
 {

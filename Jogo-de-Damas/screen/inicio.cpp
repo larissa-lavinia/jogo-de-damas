@@ -1,6 +1,7 @@
 #include <raylib.h>
+#include "inicio.h"
 
-int inicio()
+OpcaoInicio inicio()
 {
     while (!WindowShouldClose())
     {
@@ -31,19 +32,19 @@ int inicio()
             // Cadastro
             if (CheckCollisionPointRec(mouse, botaoCadastro))
             {
-                return 1;
+                return OpcaoInicio::CADASTRO;
             }
 
             // Login
             if (CheckCollisionPointRec(mouse, botaoLogin))
             {
-                return 2;
+                return OpcaoInicio::LOGIN;
             }
 
             // Sair
             if (CheckCollisionPointRec(mouse, botaoSair))
             {
-                return 0;
+                return OpcaoInicio::SAIR;
             }
         }
 
@@ -129,5 +130,5 @@ int inicio()
         EndDrawing();
     }
 
-    return 0;
+    return OpcaoInicio::SAIR;
 }
