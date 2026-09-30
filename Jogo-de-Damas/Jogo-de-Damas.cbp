@@ -39,35 +39,47 @@
 
         </Build>
 
-        <!-- Configuração geral do compilador -->
         <Compiler>
             <Add option="-Wall" />
             <Add option="-fexceptions" />
             <Add option="-std=gnu++17" />
-
-            <!-- Raylib dentro do projeto -->
-            <Add directory="config/raylib/include" />
+            <Add directory="raylib/include" />
         </Compiler>
 
-        <!-- Configuração geral do linker -->
         <Linker>
-
-            <!-- Raylib compilado dentro do projeto -->
-            <Add library="raylib" />
-            <Add directory="config/raylib/lib/linux" />
-
-            <!-- Dependências do Raylib no Linux -->
+            <Add library="raylib/lib/linux/libraylib.a" />
+            <Add library="GL" />
             <Add library="X11" />
+            <Add library="m" />
             <Add library="pthread" />
             <Add library="dl" />
-            <Add library="m" />
             <Add library="rt" />
-
         </Linker>
+
+        <Unit filename="damas/jogo.cpp" />
+        <Unit filename="damas/movimentos.cpp" />
+        <Unit filename="damas/movimentos.h" />
+        <Unit filename="damas/peca.cpp" />
+        <Unit filename="damas/peca.h" />
+        <Unit filename="damas/tabuleiro.cpp" />
+        <Unit filename="damas/tabuleiro.h" />
+
+        <Unit filename="screen/inicio.cpp" />
+        <Unit filename="screen/inicio.h" />
+        <Unit filename="screen/jogo.cpp" />
+        <Unit filename="screen/jogo.h" />
+        <Unit filename="screen/login.cpp" />
+        <Unit filename="screen/login.h" />
+        <Unit filename="screen/cadastro.cpp" />
+        <Unit filename="screen/cadastro.h" />
+        <Unit filename="screen/menu.cpp" />
+        <Unit filename="screen/menu.h" />
 
         <Unit filename="main.cpp" />
 
-        <Extensions />
+        <Unit filename="usuario/usuario.cpp" />
+        <Unit filename="usuario/usuario.h" />
 
+        <Extensions />
     </Project>
 </CodeBlocks_project_file>

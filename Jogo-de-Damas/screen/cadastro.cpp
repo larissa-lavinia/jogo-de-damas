@@ -1,14 +1,10 @@
 #include <raylib.h>
 #include <string>
 
-#include "../usuario.h"
+#include "cadastro.h"
+#include "../usuario/usuario.h"
 
 using namespace std;
-
-enum class AcaoTelaCadastro
-{
-    VOLTAR
-};
 
 AcaoTelaCadastro telaCadastro()
 {
@@ -41,6 +37,12 @@ AcaoTelaCadastro telaCadastro()
         Rectangle botaoVoltar = {
             390, 520, 240, 50
         };
+
+        // =========================
+        // CONTROLE DO BOTÃO VOLTAR
+        // =========================
+
+        bool voltar = false;
 
         // =========================
         // ENTRADA DO TECLADO
@@ -100,18 +102,23 @@ AcaoTelaCadastro telaCadastro()
 
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
         {
+            // Campo nickname
             if (CheckCollisionPointRec(mouse, campoNickname))
             {
                 digitandoNickname = true;
                 digitandoSenha = false;
                 mensagem = "";
             }
+
+            // Campo senha
             else if (CheckCollisionPointRec(mouse, campoSenha))
             {
                 digitandoNickname = false;
                 digitandoSenha = true;
                 mensagem = "";
             }
+
+            // Botão cadastrar
             else if (CheckCollisionPointRec(mouse, botaoCadastrar))
             {
                 digitandoNickname = false;
@@ -138,10 +145,17 @@ AcaoTelaCadastro telaCadastro()
                     }
                 }
             }
+
+            // Botão voltar
             else if (CheckCollisionPointRec(mouse, botaoVoltar))
             {
-                return AcaoTelaCadastro::VOLTAR;
+                digitandoNickname = false;
+                digitandoSenha = false;
+
+                voltar = true;
             }
+
+            // Clique fora dos campos
             else
             {
                 digitandoNickname = false;
@@ -315,7 +329,17 @@ AcaoTelaCadastro telaCadastro()
             );
         }
 
+        // Finaliza o frame antes de retornar
         EndDrawing();
+
+        // =========================
+        // RETORNO
+        // =========================
+
+        if (voltar)
+        {
+            return AcaoTelaCadastro::VOLTAR;
+        }
     }
 
     return AcaoTelaCadastro::VOLTAR;

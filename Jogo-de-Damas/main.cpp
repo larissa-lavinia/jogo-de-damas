@@ -1,20 +1,20 @@
 #include <raylib.h>
+#include <string>
+
 #include "config/constantes.h"
 
-#include "usuario.h"
-#include "screen/login.cpp"
-#include "screen/inicio.cpp"
-#include "screen/cadastro.cpp"
+#include "screen/inicio.h"
+#include "screen/login.h"
+#include "screen/cadastro.h"
+#include "screen/menu.h"
+#include "screen/jogo.h"
 
-enum class OpcaoInicio
-{
-    SAIR = 0,
-    CADASTRO = 1,
-    LOGIN = 2
-};
+using namespace std;
 
 int main()
 {
+    string nomeUsuario = "";
+
     InitWindow(
         Constantes::Tela::LARGURA,
         Constantes::Tela::ALTURA,
@@ -27,19 +27,70 @@ int main()
 
     while (executando && !WindowShouldClose())
     {
-        OpcaoInicio opcao = static_cast<OpcaoInicio>(inicio());
+        // =========================
+        // TELA INICIAL
+        // =========================
+
+        OpcaoInicio opcao = inicio();
+
+        // =========================
+        // CADASTRO
+        // =========================
 
         if (opcao == OpcaoInicio::CADASTRO)
         {
             telaCadastro();
         }
 
-        if (opcao == OpcaoInicio::LOGIN)
+        // =========================
+        // LOGIN
+        // =========================
+
+        else if (opcao == OpcaoInicio::LOGIN)
         {
-            telaLogin();
+            AcaoTelaLogin resultado = telaLogin(nomeUsuario);
+
+            if (resultado == AcaoTelaLogin::ENTRAR_MENU)
+            {
+                // =========================
+                // MENU
+                // =========================
+
+                bool dentroDoMenu = true;
+
+                while (dentroDoMenu && !WindowShouldClose())
+                {
+                    AcaoMenu acao = menu(nomeUsuario);
+
+                    if (acao == AcaoMenu::DESLOGAR)
+                    {
+                        dentroDoMenu = false;
+                        nomeUsuario = "";
+                    }
+
+                    else if (acao == AcaoMenu::NOVA_PARTIDA)
+                    {
+                        telaJogo(nomeUsuario);
+                    }
+
+                    else if (acao == AcaoMenu::CONTINUAR_PARTIDA)
+                    {
+                        // Implementaremos depois.
+                    }
+
+                    else if (acao == AcaoMenu::HISTORICO)
+                    {
+                        // Implementaremos depois.
+                    }
+                }
+            }
         }
 
-        if (opcao == OpcaoInicio::SAIR)
+        // =========================
+        // SAIR
+        // =========================
+
+        else if (opcao == OpcaoInicio::SAIR)
         {
             executando = false;
         }

@@ -1,22 +1,12 @@
 #include <raylib.h>
 #include <string>
 
-#include "../usuario.h"
+#include "login.h"
+#include "../usuario/usuario.h"
 
 using namespace std;
 
-enum class AcaoTelaLogin
-{
-    VOLTAR
-};
-
-bool verificarLogin(string nickname, string senha)
-{
-    // TODO: implementar consulta dos usuarios cadastrados
-    return false;
-}
-
-AcaoTelaLogin telaLogin()
+AcaoTelaLogin telaLogin(string& usuarioLogado)
 {
     string nickname = "";
     string senha = "";
@@ -136,10 +126,8 @@ AcaoTelaLogin telaLogin()
                 {
                     if (verificarLogin(nickname, senha))
                     {
-                        mensagem = "Login realizado com sucesso!";
-
-                        nickname = "";
-                        senha = "";
+                        usuarioLogado = nickname;
+                        return AcaoTelaLogin::ENTRAR_MENU;
                     }
                     else
                     {
