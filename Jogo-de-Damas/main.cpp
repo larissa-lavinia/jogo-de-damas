@@ -18,8 +18,7 @@ int main()
     InitWindow(
         Constantes::Tela::LARGURA,
         Constantes::Tela::ALTURA,
-        Constantes::Tela::TITULO
-    );
+        Constantes::Tela::TITULO);
 
     SetTargetFPS(Constantes::Tela::FPS);
 
@@ -39,7 +38,12 @@ int main()
 
         if (opcao == OpcaoInicio::CADASTRO)
         {
-            telaCadastro();
+            AcaoTelaCadastro resultadoCadastro = telaCadastro();
+
+            if (resultadoCadastro == AcaoTelaCadastro::VOLTAR)
+            {
+                continue;
+            }
         }
 
         // =========================
