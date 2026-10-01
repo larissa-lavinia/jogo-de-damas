@@ -336,11 +336,25 @@ bool podeCapturar(
     return false;
 }
 
-bool validarJogada(peca tabuleiro[TABTAM][TABTAM], int linhaInicial, int colunaInicial, int linhaFinal, int colunaFinal){
-    if (podeCapturar(tabuleiro, linhaInicial, colunaInicial, linhaFinal, colunaFinal))
-        return true;
-    else if (podeMoverSimples(tabuleiro, linhaInicial, colunaInicial, linhaFinal, colunaFinal))
-        return true;
+bool existeCapturaDisponivel(peca tabuleiro[TABTAM][TABTAM], Cor jogador){ //Verificar se há captura obrigatória
+    for (int lInicial = 0; lInicial < TABTAM; lInicial++)
+        for (int cInicial = 0; cInicial < TABTAM; cInicial++)
+            if (tabuleiro[lInicial][cInicial].ocupada && tabuleiro[lInicial][cInicial].cor == jogador)
+                for (int lFinal = 0; lFinal < TABTAM; lFinal++)
+                    for (int cFinal = 0; cFinal < TABTAM; cFinal++) // Verificar os possíveis movimentos
+                        if (podeCapturar(tabuleiro, lInicial, cInicial, lFinal, cFinal)) // Caso haja uma captura
+                            return true;
 
     return false;
+}
+
+bool validarJogada(peca tabuleiro[TABTAM][TABTAM], int linhaInicial, int colunaInicial, int linhaFinal, int colunaFinal, Cor jogador){
+    bool ehCapturaObrigatoria = existeCapturaDisponivel(tabuleiro, jogador);
+    bool capturar = podeCapturar(tabuleiro, linhaInicial, colunaInicial, linhaFinal, colunaFinal);
+
+    // Caso tiver captura no tabuleiro, o jogador é obrigado a capturar
+    if (ehCapturaObrigatoria){
+        return capturar;
+    }
+    return podeMoverSimples(tabuleiro, linhaInicial, colunaInicial, linhaFinal, colunaFinal);
 }

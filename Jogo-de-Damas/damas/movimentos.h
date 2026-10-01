@@ -33,7 +33,8 @@ bool validarJogada(
     int linhaInicial,
     int colunaInicial,
     int linhaFinal,
-    int colunaFinal
+    int colunaFinal,
+    Cor jogador
 );
 
 #endif

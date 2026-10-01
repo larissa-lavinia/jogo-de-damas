@@ -43,7 +43,8 @@ bool realizarJogada(
             linhaInicial,
             colunaInicial,
             linhaFinal,
-            colunaFinal))
+            colunaFinal,
+            jogador))
     {
         return false;
     }
