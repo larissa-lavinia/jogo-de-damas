@@ -9,6 +9,7 @@
 #include "../damas/tabuleiro.h"
 #include "../damas/peca.h"
 #include "../damas/maquina.h"
+#include "../audio/audio.h"
 
 using namespace std;
 
@@ -360,6 +361,7 @@ void telaJogo(const string &usuarioLogado)
                             if (!partida.emAndamento)
                             {
                                 mensagem = "Fim da partida!";
+                                tocarSomVitoria();
                             }
 
                             // Escolhe a jogada, masnão altera o tabuleiro.
@@ -379,13 +381,14 @@ void telaJogo(const string &usuarioLogado)
                             {
                                 mensagem =
                                     "Voce venceu! A maquina nao tem jogadas.";
-
+                                tocarSomVitoria();
                                 partidaEncerrada = true;
                             }
                         }
                         else
                         {
                             mensagem = "Movimento invalido.";
+                            tocarSomErro();
                         }
                     }
                 }
@@ -423,6 +426,7 @@ void telaJogo(const string &usuarioLogado)
                     else
                     {
                         mensagem = "Fim da partida!";
+                        tocarSomVitoria();
                     }
                 }
                 else
@@ -982,6 +986,7 @@ void telaJogo(const string &usuarioLogado)
                 "Voltar ao menu",
                 MADEIRA,
                 hoverVitoria);
+            
         }
 
         EndDrawing();

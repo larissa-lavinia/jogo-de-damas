@@ -1,5 +1,6 @@
 #include "movimentos.h"
 #include <cmath>
+#include "../audio/audio.h"
 
 void moverPeca(
     peca tabuleiro[TABTAM][TABTAM],
@@ -87,11 +88,14 @@ void moverPeca(
         if (corPeca == BRANCA && linhaFinal == 7)
         {
             tornarDama(tabuleiro[linhaFinal][colunaFinal]);
+            tocarSomVirarDama();
+            
         }
 
         if (corPeca == PRETA && linhaFinal == 0)
         {
             tornarDama(tabuleiro[linhaFinal][colunaFinal]);
+            tocarSomVirarDama();
         }
     }
 }

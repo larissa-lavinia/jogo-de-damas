@@ -1,8 +1,8 @@
 #include "jogo.h"
-
+#include "../audio/audio.h"
 #include "movimentos.h"
 #include "tabuleiro.h"
-
+#include <raylib.h>
 //emAndamento, pontosBrancas, pontosPretas, vezDoJogador
 Partida partida = { false, 0, 0, BRANCA };
 
@@ -24,6 +24,7 @@ bool realizarJogada(
     Cor jogador
 )
 {
+   
     // Verifica se as posições estão dentro do tabuleiro
     if (linhaInicial < 0 || linhaInicial >= TABTAM ||
         colunaInicial < 0 || colunaInicial >= TABTAM ||
@@ -76,6 +77,8 @@ bool realizarJogada(
         colunaFinal
     );
 
+    tocarSomMovimento();
+ 
     // Soma ponto para quem capturou
     if (foiCaptura)
     {
@@ -96,6 +99,7 @@ bool realizarJogada(
     }
 
     return true;
+
 
 }
 

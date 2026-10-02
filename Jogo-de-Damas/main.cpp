@@ -8,6 +8,7 @@
 #include "screen/cadastro.h"
 #include "screen/menu.h"
 #include "screen/jogo.h"
+#include "audio/audio.h"
 
 using namespace std;
 
@@ -19,7 +20,9 @@ int main()
         Constantes::Tela::LARGURA,
         Constantes::Tela::ALTURA,
         Constantes::Tela::TITULO);
-
+ 
+    InitAudioDevice();  
+     carregarSons();
     SetTargetFPS(Constantes::Tela::FPS);
 
     bool executando = true;
@@ -100,6 +103,8 @@ int main()
         }
     }
 
+    descarregarSons();
+    CloseAudioDevice();  
     CloseWindow();
 
     return 0;
