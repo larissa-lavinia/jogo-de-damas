@@ -6,6 +6,154 @@
 
 using namespace std;
 
+// ==========================================================
+// BOTÃO
+// ==========================================================
+
+void desenharBotaoLogin(
+    Rectangle botao,
+    const char* texto,
+    Color cor,
+    bool hover,
+    int tamanhoTexto
+)
+{
+    // Sombra
+    DrawRectangleRounded(
+        {
+            botao.x + 4,
+            botao.y + 6,
+            botao.width,
+            botao.height
+        },
+        0.20f,
+        12,
+        Fade(BLACK, 0.25f)
+    );
+
+    Color corBotao = cor;
+
+    if (hover)
+    {
+        corBotao = Color{
+            (unsigned char)(cor.r + 20),
+            (unsigned char)(cor.g + 20),
+            (unsigned char)(cor.b + 20),
+            cor.a
+        };
+    }
+
+    // Corpo
+    DrawRectangleRounded(
+        botao,
+        0.20f,
+        12,
+        corBotao
+    );
+
+    // Borda
+    DrawRectangleRoundedLines(
+        botao,
+        0.20f,
+        12,
+        Fade(WHITE, 0.15f)
+    );
+
+    // Texto centralizado
+    int larguraTexto =
+        MeasureText(texto, tamanhoTexto);
+
+    float textoX =
+        botao.x +
+        (botao.width - larguraTexto) / 2.0f;
+
+    float textoY =
+        botao.y +
+        (botao.height - tamanhoTexto) / 2.0f - 2;
+
+    DrawText(
+        texto,
+        (int)textoX,
+        (int)textoY,
+        tamanhoTexto,
+        WHITE
+    );
+}
+
+// ==========================================================
+// CAMPO DE TEXTO
+// ==========================================================
+
+void desenharCampoLogin(
+    Rectangle campo,
+    const char* texto,
+    bool selecionado,
+    int tamanhoTexto = 20
+)
+{
+    // Fundo do campo
+    Color corCampo = Color{
+        255,
+        250,
+        239,
+        255
+    };
+
+    DrawRectangleRounded(
+        campo,
+        0.15f,
+        10,
+        corCampo
+    );
+
+    // Borda
+    Color corBorda;
+
+    if (selecionado)
+    {
+        corBorda = Color{
+            218,
+            158,
+            55,
+            255
+        };
+    }
+    else
+    {
+        corBorda = Color{
+            205,
+            195,
+            178,
+            255
+        };
+    }
+
+    DrawRectangleRoundedLines(
+        campo,
+        0.15f,
+        10,
+        corBorda
+    );
+
+    // Texto
+    DrawText(
+        texto,
+        (int)campo.x + 18,
+        (int)campo.y + 14,
+        tamanhoTexto,
+        Color{
+            55,
+            50,
+            45,
+            255
+        }
+    );
+}
+
+// ==========================================================
+// TELA DE LOGIN
+// ==========================================================
+
 AcaoTelaLogin telaLogin(string& usuarioLogado)
 {
     string nickname = "";
@@ -18,29 +166,83 @@ AcaoTelaLogin telaLogin(string& usuarioLogado)
 
     while (!WindowShouldClose())
     {
-        // =========================
+        // ==================================================
+        // DIMENSÕES
+        // ==================================================
+
+        int larguraTela = GetScreenWidth();
+        int alturaTela = GetScreenHeight();
+
+        // ==================================================
+        // CARD
+        // ==================================================
+
+        float larguraCard = 520.0f;
+        float alturaCard = 570.0f;
+
+        float cardX =
+            (larguraTela - larguraCard) / 2.0f;
+
+        float cardY =
+            (alturaTela - alturaCard) / 2.0f + 25;
+
+        // ==================================================
         // CAMPOS
-        // =========================
+        // ==================================================
 
         Rectangle campoNickname = {
-            390, 220, 500, 50
+            cardX + 60,
+            cardY + 165,
+            400,
+            55
         };
 
         Rectangle campoSenha = {
-            390, 330, 500, 50
+            cardX + 60,
+            cardY + 270,
+            400,
+            55
         };
 
+        // ==================================================
+        // BOTÕES
+        // ==================================================
+
         Rectangle botaoLogin = {
-            390, 430, 240, 60
+            cardX + 60,
+            cardY + 365,
+            400,
+            60
         };
 
         Rectangle botaoVoltar = {
-            390, 520, 240, 50
+            cardX + 60,
+            cardY + 440,
+            400,
+            50
         };
 
-        // =========================
+        // ==================================================
+        // MOUSE
+        // ==================================================
+
+        Vector2 mouse = GetMousePosition();
+
+        bool hoverLogin =
+            CheckCollisionPointRec(
+                mouse,
+                botaoLogin
+            );
+
+        bool hoverVoltar =
+            CheckCollisionPointRec(
+                mouse,
+                botaoVoltar
+            );
+
+        // ==================================================
         // ENTRADA DO TECLADO
-        // =========================
+        // ==================================================
 
         int tecla = GetCharPressed();
 
@@ -65,9 +267,9 @@ AcaoTelaLogin telaLogin(string& usuarioLogado)
             tecla = GetCharPressed();
         }
 
-        // =========================
+        // ==================================================
         // BACKSPACE
-        // =========================
+        // ==================================================
 
         if (IsKeyPressed(KEY_BACKSPACE))
         {
@@ -88,16 +290,16 @@ AcaoTelaLogin telaLogin(string& usuarioLogado)
             }
         }
 
-        // =========================
-        // MOUSE
-        // =========================
-
-        Vector2 mouse = GetMousePosition();
+        // ==================================================
+        // MOUSE / CLIQUES
+        // ==================================================
 
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
         {
             // Campo nickname
-            if (CheckCollisionPointRec(mouse, campoNickname))
+            if (CheckCollisionPointRec(
+                    mouse,
+                    campoNickname))
             {
                 digitandoNickname = true;
                 digitandoSenha = false;
@@ -105,7 +307,9 @@ AcaoTelaLogin telaLogin(string& usuarioLogado)
             }
 
             // Campo senha
-            else if (CheckCollisionPointRec(mouse, campoSenha))
+            else if (CheckCollisionPointRec(
+                         mouse,
+                         campoSenha))
             {
                 digitandoNickname = false;
                 digitandoSenha = true;
@@ -113,36 +317,42 @@ AcaoTelaLogin telaLogin(string& usuarioLogado)
             }
 
             // Botão login
-            else if (CheckCollisionPointRec(mouse, botaoLogin))
+            else if (hoverLogin)
             {
                 digitandoNickname = false;
                 digitandoSenha = false;
 
                 if (nickname.empty() || senha.empty())
                 {
-                    mensagem = "Preencha todos os campos!";
+                    mensagem =
+                        "Preencha todos os campos!";
                 }
                 else
                 {
-                    if (verificarLogin(nickname, senha))
+                    if (verificarLogin(
+                            nickname,
+                            senha))
                     {
                         usuarioLogado = nickname;
-                        return AcaoTelaLogin::ENTRAR_MENU;
+
+                        return
+                            AcaoTelaLogin::ENTRAR_MENU;
                     }
                     else
                     {
-                        mensagem = "Nickname ou senha incorretos!";
+                        mensagem =
+                            "Nickname ou senha incorretos!";
                     }
                 }
             }
 
             // Botão voltar
-            else if (CheckCollisionPointRec(mouse, botaoVoltar))
+            else if (hoverVoltar)
             {
                 return AcaoTelaLogin::VOLTAR;
             }
 
-            // Clique fora dos campos
+            // Clique fora
             else
             {
                 digitandoNickname = false;
@@ -150,171 +360,460 @@ AcaoTelaLogin telaLogin(string& usuarioLogado)
             }
         }
 
-        // =========================
+        // ==================================================
         // SENHA OCULTA
-        // =========================
-
-        int tamanhoSenha = senha.size();
+        // ==================================================
 
         string senhaOculta = "";
 
-        for (int i = 0; i < tamanhoSenha; i++)
+        for (int i = 0; i < (int)senha.size(); i++)
         {
             senhaOculta += "*";
         }
 
-        // =========================
+        // ==================================================
         // DESENHO
-        // =========================
+        // ==================================================
 
         BeginDrawing();
 
-        ClearBackground(RAYWHITE);
+        // ==================================================
+        // FUNDO
+        // ==================================================
 
-        // =========================
+        ClearBackground(
+            Color{
+                24,
+                72,
+                56,
+                255
+            }
+        );
+
+        // ==================================================
+        // TEXTURA
+        // ==================================================
+
+        for (int y = 0; y < alturaTela; y += 40)
+        {
+            DrawLine(
+                0,
+                y,
+                larguraTela,
+                y,
+                Fade(
+                    Color{
+                        255,
+                        255,
+                        255,
+                        255
+                    },
+                    0.015f
+                )
+            );
+        }
+
+        // ==================================================
+        // BARRA SUPERIOR
+        // ==================================================
+
+        DrawRectangle(
+            0,
+            0,
+            larguraTela,
+            78,
+            Color{
+                77,
+                47,
+                27,
+                255
+            }
+        );
+
+        DrawRectangle(
+            0,
+            76,
+            larguraTela,
+            4,
+            Color{
+                218,
+                158,
+                55,
+                255
+            }
+        );
+
+        // ==================================================
+        // LOGO
+        // ==================================================
+
+        DrawText(
+            "DAMAS",
+            35,
+            18,
+            36,
+            Color{
+                255,
+                225,
+                150,
+                255
+            }
+        );
+
+        DrawText(
+            "JOGO DE TABULEIRO",
+            38,
+            53,
+            12,
+            Fade(WHITE, 0.75f)
+        );
+
+        // ==================================================
+        // SOMBRA DO CARD
+        // ==================================================
+
+        DrawRectangleRounded(
+            {
+                cardX + 8,
+                cardY + 10,
+                larguraCard,
+                alturaCard
+            },
+            0.04f,
+            12,
+            Fade(BLACK, 0.30f)
+        );
+
+        // ==================================================
+        // CARD
+        // ==================================================
+
+        DrawRectangleRounded(
+            {
+                cardX,
+                cardY,
+                larguraCard,
+                alturaCard
+            },
+            0.04f,
+            12,
+            Color{
+                247,
+                241,
+                226,
+                255
+            }
+        );
+
+        // ==================================================
+        // DETALHE DOURADO
+        // ==================================================
+
+        DrawRectangleRounded(
+            {
+                cardX,
+                cardY,
+                larguraCard,
+                8
+            },
+            0.04f,
+            12,
+            Color{
+                218,
+                158,
+                55,
+                255
+            }
+        );
+
+        // ==================================================
         // TÍTULO
-        // =========================
+        // ==================================================
+
+        const char* titulo =
+            "Entrar";
+
+        int larguraTitulo =
+            MeasureText(titulo, 34);
 
         DrawText(
-            "LOGIN",
-            500,
-            120,
-            40,
-            DARKGRAY
+            titulo,
+            (int)(
+                cardX +
+                (larguraCard - larguraTitulo) / 2
+            ),
+            (int)cardY + 40,
+            34,
+            Color{
+                77,
+                47,
+                27,
+                255
+            }
         );
 
-        // =========================
-        // NICKNAME
-        // =========================
+        // ==================================================
+        // SUBTÍTULO
+        // ==================================================
+
+        const char* subtitulo =
+            "Entre na sua conta para continuar";
+
+        int larguraSubtitulo =
+            MeasureText(subtitulo, 16);
 
         DrawText(
-            "Nickname:",
-            390,
-            185,
-            20,
-            DARKGRAY
+            subtitulo,
+            (int)(
+                cardX +
+                (larguraCard - larguraSubtitulo) / 2
+            ),
+            (int)cardY + 88,
+            16,
+            Color{
+                110,
+                100,
+                88,
+                255
+            }
         );
 
-        DrawRectangleRec(
+        // ==================================================
+        // DECORAÇÃO
+        // ==================================================
+
+        DrawLine(
+            (int)cardX + 60,
+            (int)cardY + 125,
+            (int)cardX + 185,
+            (int)cardY + 125,
+            Color{
+                218,
+                158,
+                55,
+                255
+            }
+        );
+
+        DrawCircle(
+            (int)cardX + 260,
+            (int)cardY + 125,
+            5,
+            Color{
+                218,
+                158,
+                55,
+                255
+            }
+        );
+
+        DrawLine(
+            (int)cardX + 335,
+            (int)cardY + 125,
+            (int)cardX + 460,
+            (int)cardY + 125,
+            Color{
+                218,
+                158,
+                55,
+                255
+            }
+        );
+
+        // ==================================================
+        // LABEL NICKNAME
+        // ==================================================
+
+        DrawText(
+            "Nickname",
+            (int)campoNickname.x,
+            (int)campoNickname.y - 27,
+            16,
+            Color{
+                77,
+                47,
+                27,
+                255
+            }
+        );
+
+        // ==================================================
+        // CAMPO NICKNAME
+        // ==================================================
+
+        desenharCampoLogin(
             campoNickname,
-            LIGHTGRAY
-        );
-
-        DrawText(
             nickname.c_str(),
-            405,
-            235,
-            20,
-            BLACK
+            digitandoNickname
         );
 
-        // Cursor do nickname
-        if (digitandoNickname && ((int)GetTime() % 2 == 0))
+        // Cursor nickname
+        if (
+            digitandoNickname &&
+            ((int)GetTime() % 2 == 0)
+        )
         {
-            int larguraTexto = MeasureText(
-                nickname.c_str(),
-                20
-            );
+            int larguraTexto =
+                MeasureText(
+                    nickname.c_str(),
+                    20
+                );
 
             DrawLine(
-                405 + larguraTexto,
-                232,
-                405 + larguraTexto,
-                253,
-                BLACK
+                (int)campoNickname.x +
+                    18 +
+                    larguraTexto,
+                (int)campoNickname.y + 13,
+                (int)campoNickname.x +
+                    18 +
+                    larguraTexto,
+                (int)campoNickname.y + 40,
+                Color{
+                    77,
+                    47,
+                    27,
+                    255
+                }
             );
         }
 
-        // =========================
-        // SENHA
-        // =========================
+        // ==================================================
+        // LABEL SENHA
+        // ==================================================
 
         DrawText(
-            "Senha:",
-            390,
-            295,
-            20,
-            DARKGRAY
+            "Senha",
+            (int)campoSenha.x,
+            (int)campoSenha.y - 27,
+            16,
+            Color{
+                77,
+                47,
+                27,
+                255
+            }
         );
 
-        DrawRectangleRec(
+        // ==================================================
+        // CAMPO SENHA
+        // ==================================================
+
+        desenharCampoLogin(
             campoSenha,
-            LIGHTGRAY
-        );
-
-        DrawText(
             senhaOculta.c_str(),
-            405,
-            345,
-            20,
-            BLACK
+            digitandoSenha
         );
 
-        // Cursor da senha
-        if (digitandoSenha && ((int)GetTime() % 2 == 0))
+        // Cursor senha
+        if (
+            digitandoSenha &&
+            ((int)GetTime() % 2 == 0)
+        )
         {
-            int larguraTexto = MeasureText(
-                senhaOculta.c_str(),
-                20
-            );
+            int larguraTexto =
+                MeasureText(
+                    senhaOculta.c_str(),
+                    20
+                );
 
             DrawLine(
-                405 + larguraTexto,
-                342,
-                405 + larguraTexto,
-                363,
-                BLACK
+                (int)campoSenha.x +
+                    18 +
+                    larguraTexto,
+                (int)campoSenha.y + 13,
+                (int)campoSenha.x +
+                    18 +
+                    larguraTexto,
+                (int)campoSenha.y + 40,
+                Color{
+                    77,
+                    47,
+                    27,
+                    255
+                }
             );
         }
 
-        // =========================
-        // BOTÃO LOGIN
-        // =========================
+        // ==================================================
+        // BOTÃO ENTRAR
+        // ==================================================
 
-        DrawRectangleRec(
+        desenharBotaoLogin(
             botaoLogin,
-            DARKBLUE
-        );
-
-        DrawText(
             "Entrar",
-            485,
-            450,
-            25,
-            WHITE
+            Color{
+                35,
+                125,
+                82,
+                255
+            },
+            hoverLogin,
+            22
         );
 
-        // =========================
+        // ==================================================
         // BOTÃO VOLTAR
-        // =========================
+        // ==================================================
 
-        DrawRectangleRec(
+        desenharBotaoLogin(
             botaoVoltar,
-            DARKGRAY
-        );
-
-        DrawText(
             "Voltar",
-            480,
-            535,
-            20,
-            WHITE
+            Color{
+                110,
+                82,
+                66,
+                255
+            },
+            hoverVoltar,
+            18
         );
 
-        // =========================
+        // ==================================================
         // MENSAGEM
-        // =========================
+        // ==================================================
 
         if (!mensagem.empty())
         {
+            int larguraMensagem =
+                MeasureText(
+                    mensagem.c_str(),
+                    16
+                );
+
+            float mensagemX =
+                cardX +
+                (larguraCard - larguraMensagem) / 2.0f;
+
             DrawText(
                 mensagem.c_str(),
-                390,
-                590,
-                20,
-                RED
+                (int)mensagemX,
+                (int)cardY + 510,
+                16,
+                Color{
+                    170,
+                    55,
+                    45,
+                    255
+                }
             );
         }
+
+        // ==================================================
+        // RODAPÉ
+        // ==================================================
+
+        DrawText(
+            "Acesse sua conta para continuar jogando",
+            (int)cardX + 130,
+            (int)cardY + 545,
+            13,
+            Color{
+                130,
+                120,
+                105,
+                255
+            }
+        );
 
         EndDrawing();
     }

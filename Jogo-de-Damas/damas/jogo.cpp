@@ -51,7 +51,8 @@ bool realizarJogada(
             linhaInicial,
             colunaInicial,
             linhaFinal,
-            colunaFinal))
+            colunaFinal,
+            jogador))
     {
         return false;
     }
@@ -95,9 +96,7 @@ bool realizarJogada(
     }
 
     return true;
-<<<<<<< Updated upstream
-}
-=======
+
 }
 
 int ganharPontos(const Partida& p, Cor jogador)
@@ -115,4 +114,4 @@ Cor vencedor(const Partida& p)
 {
     return (p.pontosBrancas >= PONTOS_VITORIA) ? BRANCA : PRETA;
 }
->>>>>>> Stashed changes
+
