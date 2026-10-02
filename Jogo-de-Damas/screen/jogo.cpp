@@ -355,21 +355,18 @@ void telaJogo(const string &usuarioLogado)
 
                             mensagem = "A maquina esta pensando...";
 
-                            // Se a jogada da pessoa terminou a partida
-                            // (12 pontos), a máquina não joga.
+                            // Se a jogada da pessoa terminou a partida, a máquina não joga.
                             if (!partida.emAndamento)
                             {
                                 mensagem = "Fim da partida!";
                             }
 
-                            // Escolhe a jogada, mas ainda não
-                            // altera o tabuleiro.
+                            // Escolhe a jogada, masnão altera o tabuleiro.
                             else if (escolherJogadaMaquina(
                                     PRETA,
                                     jogadaMaquina))
                             {
-                                // Guarda uma cópia da peça para
-                                // desenhá-la durante a animação.
+                                // Guarda uma cópia da peça para desenhá-la durante a animação.
                                 pecaAnimada = tabuleiro[
                                     jogadaMaquina.linhaInicial]
                                     [jogadaMaquina.colunaInicial];
