@@ -1,3 +1,4 @@
+
 #include "jogo.h"
 
 #include <raylib.h>
@@ -6,6 +7,7 @@
 #include "../damas/jogo.h"
 #include "../damas/tabuleiro.h"
 #include "../damas/peca.h"
+#include "../damas/maquina.h"
 
 using namespace std;
 
@@ -13,37 +15,14 @@ using namespace std;
 // CORES DA INTERFACE
 // ==========================================================
 
-const Color FUNDO_JOGO = {
-    20, 54, 45, 255
-};
-
-const Color VERDE_PAINEL = {
-    27, 67, 55, 255
-};
-
-const Color MADEIRA = {
-    91, 55, 32, 255
-};
-
-const Color MADEIRA_CLARA = {
-    125, 78, 44, 255
-};
-
-const Color DOURADO = {
-    218, 158, 55, 255
-};
-
-const Color CREME = {
-    246, 239, 220, 255
-};
-
-const Color CASA_CLARA = {
-    239, 216, 174, 255
-};
-
-const Color CASA_ESCURA = {
-    117, 76, 48, 255
-};
+const Color FUNDO_JOGO = {20, 54, 45, 255};
+const Color VERDE_PAINEL = {27, 67, 55, 255};
+const Color MADEIRA = {91, 55, 32, 255};
+const Color MADEIRA_CLARA = {125, 78, 44, 255};
+const Color DOURADO = {218, 158, 55, 255};
+const Color CREME = {246, 239, 220, 255};
+const Color CASA_CLARA = {239, 216, 174, 255};
+const Color CASA_ESCURA = {117, 76, 48, 255};
 
 // ==========================================================
 // DESENHA BOTÃO
@@ -51,23 +30,14 @@ const Color CASA_ESCURA = {
 
 void desenharBotaoJogo(
     Rectangle botao,
-    const char* texto,
+    const char *texto,
     Color cor,
-    bool hover
-)
+    bool hover)
 {
-    // Sombra
     DrawRectangleRounded(
-        {
-            botao.x + 4,
-            botao.y + 5,
-            botao.width,
-            botao.height
-        },
-        0.18f,
-        12,
-        Fade(BLACK, 0.30f)
-    );
+        {botao.x + 4, botao.y + 5,
+         botao.width, botao.height},
+        0.18f, 12, Fade(BLACK, 0.30f));
 
     Color corBotao = cor;
 
@@ -77,44 +47,25 @@ void desenharBotaoJogo(
             (unsigned char)(cor.r + 15),
             (unsigned char)(cor.g + 15),
             (unsigned char)(cor.b + 15),
-            cor.a
-        };
+            cor.a};
     }
 
-    // Corpo
     DrawRectangleRounded(
-        botao,
-        0.18f,
-        12,
-        corBotao
-    );
+        botao, 0.18f, 12, corBotao);
 
-    // Borda
     DrawRectangleRoundedLines(
-        botao,
-        0.18f,
-        12,
-        Fade(WHITE, 0.15f)
-    );
+        botao, 0.18f, 12,
+        Fade(WHITE, 0.15f));
 
     int tamanhoTexto = 18;
-
-    int larguraTexto =
-        MeasureText(texto, tamanhoTexto);
+    int larguraTexto = MeasureText(texto, tamanhoTexto);
 
     DrawText(
         texto,
-        (int)(
-            botao.x +
-            (botao.width - larguraTexto) / 2
-        ),
-        (int)(
-            botao.y +
-            (botao.height - tamanhoTexto) / 2
-        ),
+        (int)(botao.x + (botao.width - larguraTexto) / 2),
+        (int)(botao.y + (botao.height - tamanhoTexto) / 2),
         tamanhoTexto,
-        WHITE
-    );
+        WHITE);
 }
 
 // ==========================================================
@@ -125,113 +76,72 @@ void desenharPeca(
     peca &pecaAtual,
     float centroX,
     float centroY,
-    float raio
-)
+    float raio)
 {
     Color corPeca;
 
     if (pecaAtual.cor == BRANCA)
     {
-        corPeca = Color{
-            242,
-            235,
-            216,
-            255
-        };
+        corPeca = Color{242, 235, 216, 255};
     }
     else
     {
-        corPeca = Color{
-            42,
-            40,
-            38,
-            255
-        };
+        corPeca = Color{42, 40, 38, 255};
     }
 
-    // ======================================================
-    // SOMBRA DA PEÇA
-    // ======================================================
-
+    // Sombra
     DrawCircle(
         (int)(centroX + 3),
         (int)(centroY + 5),
         raio,
-        Fade(BLACK, 0.35f)
-    );
+        Fade(BLACK, 0.35f));
 
-    // ======================================================
-    // PEÇA
-    // ======================================================
-
+    // Corpo da peça
     DrawCircle(
         (int)centroX,
         (int)centroY,
         raio,
-        corPeca
-    );
+        corPeca);
 
-    // ======================================================
-    // BORDA EXTERNA
-    // ======================================================
-
+    // Borda externa
     DrawCircleLines(
         (int)centroX,
         (int)centroY,
         raio,
-        MADEIRA
-    );
+        MADEIRA);
 
-    // ======================================================
-    // DETALHE INTERNO
-    // ======================================================
-
+    // Detalhe interno
     DrawCircleLines(
         (int)centroX,
         (int)centroY,
         raio - 6,
-        Fade(MADEIRA, 0.45f)
-    );
+        Fade(MADEIRA, 0.45f));
 
-    // ======================================================
-    // DAMA
-    // ======================================================
-
+    // Dama
     if (pecaAtual.tipo == DAMA)
     {
         DrawCircle(
             (int)centroX,
             (int)centroY,
             raio * 0.48f,
-            DOURADO
-        );
+            DOURADO);
 
         DrawCircleLines(
             (int)centroX,
             (int)centroY,
             raio * 0.48f,
-            Color{
-                120,
-                82,
-                30,
-                255
-            }
-        );
+            Color{120, 82, 30, 255});
 
-        const char* texto = "D";
-
+        const char *texto = "D";
         int tamanho = 27;
-
-        int largura =
-            MeasureText(texto, tamanho);
+        int largura = MeasureText(texto, tamanho);
 
         DrawText(
             texto,
             (int)(centroX - largura / 2),
             (int)(centroY - tamanho / 2 - 2),
             tamanho,
-            WHITE
-        );
+            WHITE);
     }
 }
 
@@ -248,12 +158,13 @@ void telaJogo(const string &usuarioLogado)
     iniciarPartida();
 
     // ======================================================
-    // CONTROLE
+    // CONTROLE DA PARTIDA
     // ======================================================
 
     Cor jogadorAtual = BRANCA;
 
     bool pecaSelecionada = false;
+    bool partidaEncerrada = false;
 
     int linhaInicial = -1;
     int colunaInicial = -1;
@@ -262,12 +173,23 @@ void telaJogo(const string &usuarioLogado)
         "Selecione uma peca para comecar.";
 
     // ======================================================
-    // CONFIGURAÇÃO
+    // CONTROLE DA ANIMAÇÃO DA MÁQUINA
+    // ======================================================
+
+    bool animandoMaquina = false;
+
+    float tempoAnimacao = 0.0f;
+    const float duracaoAnimacao = 0.7f;
+
+    Jogada jogadaMaquina;
+    peca pecaAnimada;
+
+    // ======================================================
+    // CONFIGURAÇÃO DO TABULEIRO
     // ======================================================
 
     const float tamanhoTabuleiro = 540.0f;
-    const float tamanhoCasa =
-        tamanhoTabuleiro / 8.0f;
+    const float tamanhoCasa = tamanhoTabuleiro / 8.0f;
 
     while (!WindowShouldClose())
     {
@@ -275,21 +197,15 @@ void telaJogo(const string &usuarioLogado)
         // DIMENSÕES
         // ==================================================
 
-        int larguraTela =
-            GetScreenWidth();
-
-        int alturaTela =
-            GetScreenHeight();
+        int larguraTela = GetScreenWidth();
+        int alturaTela = GetScreenHeight();
 
         // ==================================================
         // POSIÇÃO DO TABULEIRO
         // ==================================================
 
-        float painelLateralX =
-            larguraTela - 310.0f;
-
-        float inicioX =
-            45.0f;
+        float painelLateralX = larguraTela - 310.0f;
+        float inicioX = 45.0f;
 
         float inicioY =
             (alturaTela - tamanhoTabuleiro) / 2.0f + 15.0f;
@@ -309,57 +225,44 @@ void telaJogo(const string &usuarioLogado)
 
         Rectangle botaoVoltar = {
             painelLateralX + 35,
-            alturaTela - 90,
+            (float)(alturaTela - 90),
             240,
-            50
-        };
+            50};
 
-        Vector2 mouse =
-            GetMousePosition();
+        Vector2 mouse = GetMousePosition();
 
-        bool hoverVoltar =
-            CheckCollisionPointRec(
-                mouse,
-                botaoVoltar
-            );
+        bool hoverVoltar = CheckCollisionPointRec(
+            mouse,
+            botaoVoltar);
 
         // ==================================================
-        // CLIQUE NO TABULEIRO
+        // CLIQUE DO MOUSE
         // ==================================================
 
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
         {
-            // ==============================================
-            // BOTÃO VOLTAR
-            // ==============================================
-
+            // Botão voltar
             if (hoverVoltar)
             {
                 return;
             }
 
-            // ==============================================
-            // TABULEIRO
-            // ==============================================
-
+            // A pessoa só pode jogar quando for sua vez.
+            // Durante a animação, jogadorAtual é PRETA.
             if (
+                !partidaEncerrada &&
+                !animandoMaquina &&
+                jogadorAtual == BRANCA &&
                 mouse.x >= inicioX &&
                 mouse.x < inicioX + tamanhoTabuleiro &&
                 mouse.y >= inicioY &&
-                mouse.y < inicioY + tamanhoTabuleiro
-            )
+                mouse.y < inicioY + tamanhoTabuleiro)
             {
-                int coluna =
-                    (int)(
-                        (mouse.x - inicioX) /
-                        tamanhoCasa
-                    );
+                int coluna = (int)(
+                    (mouse.x - inicioX) / tamanhoCasa);
 
-                int linha =
-                    (int)(
-                        (mouse.y - inicioY) /
-                        tamanhoCasa
-                    );
+                int linha = (int)(
+                    (mouse.y - inicioY) / tamanhoCasa);
 
                 // ==========================================
                 // NENHUMA PEÇA SELECIONADA
@@ -369,26 +272,20 @@ void telaJogo(const string &usuarioLogado)
                 {
                     if (!tabuleiro[linha][coluna].ocupada)
                     {
-                        mensagem =
-                            "Essa casa esta vazia.";
+                        mensagem = "Essa casa esta vazia.";
                     }
                     else if (
-                        tabuleiro[linha][coluna].cor
-                        != jogadorAtual
-                    )
+                        tabuleiro[linha][coluna].cor != BRANCA)
                     {
-                        mensagem =
-                            "Essa peca nao pertence a voce.";
+                        mensagem = "Essa peca nao pertence a voce.";
                     }
                     else
                     {
                         linhaInicial = linha;
                         colunaInicial = coluna;
-
                         pecaSelecionada = true;
 
-                        mensagem =
-                            "Escolha a casa de destino.";
+                        mensagem = "Escolha a casa de destino.";
                     }
                 }
 
@@ -398,64 +295,105 @@ void telaJogo(const string &usuarioLogado)
 
                 else
                 {
-                    // --------------------------------------
-                    // CLICOU EM OUTRA PEÇA DO MESMO JOGADOR
-                    // --------------------------------------
-
+                    // Clicou em outra peça branca
                     if (
                         tabuleiro[linha][coluna].ocupada &&
-                        tabuleiro[linha][coluna].cor
-                        == jogadorAtual
-                    )
+                        tabuleiro[linha][coluna].cor == BRANCA)
                     {
                         linhaInicial = linha;
                         colunaInicial = coluna;
 
-                        mensagem =
-                            "Nova peca selecionada.";
+                        mensagem = "Nova peca selecionada.";
                     }
-
-                    // --------------------------------------
-                    // TENTA MOVIMENTAR
-                    // --------------------------------------
-
                     else
                     {
-                        bool jogadaRealizada =
-                            realizarJogada(
-                                linhaInicial,
-                                colunaInicial,
-                                linha,
-                                coluna,
-                                jogadorAtual
-                            );
+                        // Tenta realizar a jogada da pessoa
+                        bool jogadaRealizada = realizarJogada(
+                            linhaInicial,
+                            colunaInicial,
+                            linha,
+                            coluna,
+                            BRANCA);
 
                         if (jogadaRealizada)
                         {
-                            mensagem =
-                                "Movimento realizado!";
+                            pecaSelecionada = false;
+                            linhaInicial = -1;
+                            colunaInicial = -1;
 
-                            // Troca jogador
-                            if (jogadorAtual == BRANCA)
+                            mensagem = "Voce jogou!";
+
+                            // ==================================
+                            // PREPARA O TURNO DA MÁQUINA
+                            // ==================================
+
+                            jogadorAtual = PRETA;
+
+                            mensagem = "A maquina esta pensando...";
+
+                            // Escolhe a jogada, mas ainda não
+                            // altera o tabuleiro.
+                            if (escolherJogadaMaquina(
+                                    PRETA,
+                                    jogadaMaquina))
                             {
-                                jogadorAtual = PRETA;
+                                // Guarda uma cópia da peça para
+                                // desenhá-la durante a animação.
+                                pecaAnimada = tabuleiro[
+                                    jogadaMaquina.linhaInicial]
+                                    [jogadaMaquina.colunaInicial];
+
+                                tempoAnimacao = 0.0f;
+                                animandoMaquina = true;
                             }
                             else
                             {
-                                jogadorAtual = BRANCA;
+                                mensagem =
+                                    "Voce venceu! A maquina nao tem jogadas.";
+
+                                partidaEncerrada = true;
                             }
-
-                            pecaSelecionada = false;
-
-                            linhaInicial = -1;
-                            colunaInicial = -1;
                         }
                         else
                         {
-                            mensagem =
-                                "Movimento invalido.";
+                            mensagem = "Movimento invalido.";
                         }
                     }
+                }
+            }
+        }
+
+        // ==================================================
+        // ATUALIZA A ANIMAÇÃO DA MÁQUINA
+        // ==================================================
+
+        if (animandoMaquina)
+        {
+            tempoAnimacao += GetFrameTime();
+
+            if (tempoAnimacao >= duracaoAnimacao)
+            {
+                // Só altera o tabuleiro quando a animação termina.
+                bool maquinaJogou = realizarJogada(
+                    jogadaMaquina.linhaInicial,
+                    jogadaMaquina.colunaInicial,
+                    jogadaMaquina.linhaFinal,
+                    jogadaMaquina.colunaFinal,
+                    PRETA);
+
+                animandoMaquina = false;
+
+                if (maquinaJogou)
+                {
+                    jogadorAtual = BRANCA;
+                    mensagem = "Sua vez! Selecione uma peca.";
+                }
+                else
+                {
+                    mensagem =
+                        "Nao foi possivel realizar a jogada.";
+
+                    partidaEncerrada = true;
                 }
             }
         }
@@ -466,10 +404,6 @@ void telaJogo(const string &usuarioLogado)
 
         BeginDrawing();
 
-        // ==================================================
-        // FUNDO
-        // ==================================================
-
         ClearBackground(FUNDO_JOGO);
 
         // ==================================================
@@ -479,12 +413,9 @@ void telaJogo(const string &usuarioLogado)
         for (int y = 0; y < alturaTela; y += 40)
         {
             DrawLine(
-                0,
-                y,
-                larguraTela,
-                y,
-                Fade(WHITE, 0.012f)
-            );
+                0, y,
+                larguraTela, y,
+                Fade(WHITE, 0.012f));
         }
 
         // ==================================================
@@ -492,20 +423,14 @@ void telaJogo(const string &usuarioLogado)
         // ==================================================
 
         DrawRectangle(
-            0,
-            0,
-            larguraTela,
-            72,
-            MADEIRA
-        );
+            0, 0,
+            larguraTela, 72,
+            MADEIRA);
 
         DrawRectangle(
-            0,
-            69,
-            larguraTela,
-            3,
-            DOURADO
-        );
+            0, 69,
+            larguraTela, 3,
+            DOURADO);
 
         // ==================================================
         // TÍTULO
@@ -513,47 +438,33 @@ void telaJogo(const string &usuarioLogado)
 
         DrawText(
             "DAMAS",
-            30,
-            14,
+            30, 14,
             34,
-            Color{
-                255,
-                225,
-                150,
-                255
-            }
-        );
+            Color{255, 225, 150, 255});
 
         DrawText(
             "PARTIDA",
-            34,
-            48,
+            34, 48,
             11,
-            Fade(WHITE, 0.75f)
-        );
+            Fade(WHITE, 0.75f));
 
         // ==================================================
         // USUÁRIO
         // ==================================================
 
-        string textoUsuario =
-            usuarioLogado;
+        string textoUsuario = usuarioLogado;
 
         DrawText(
             textoUsuario.c_str(),
-            230,
-            27,
+            230, 27,
             20,
-            CREME
-        );
+            CREME);
 
         DrawText(
             "Jogador",
-            230,
-            48,
+            230, 48,
             11,
-            Fade(WHITE, 0.60f)
-        );
+            Fade(WHITE, 0.60f));
 
         // ==================================================
         // PAINEL LATERAL
@@ -564,8 +475,7 @@ void telaJogo(const string &usuarioLogado)
             72,
             310,
             alturaTela - 72,
-            VERDE_PAINEL
-        );
+            VERDE_PAINEL);
 
         // ==================================================
         // CARD DE TURNO
@@ -575,189 +485,122 @@ void telaJogo(const string &usuarioLogado)
             painelLateralX + 35,
             105,
             240,
-            105
-        };
+            105};
 
         DrawRectangleRounded(
-            {
-                cardTurno.x + 4,
-                cardTurno.y + 5,
-                cardTurno.width,
-                cardTurno.height
-            },
-            0.08f,
-            10,
-            Fade(BLACK, 0.25f)
-        );
+            {cardTurno.x + 4,
+             cardTurno.y + 5,
+             cardTurno.width,
+             cardTurno.height},
+            0.08f, 10,
+            Fade(BLACK, 0.25f));
 
         DrawRectangleRounded(
             cardTurno,
-            0.08f,
-            10,
-            CREME
-        );
+            0.08f, 10,
+            CREME);
 
         DrawText(
             "VEZ DO JOGADOR",
             (int)cardTurno.x + 20,
             (int)cardTurno.y + 15,
             13,
-            Color{
-                110,
-                90,
-                70,
-                255
-            }
-        );
+            Color{110, 90, 70, 255});
 
-        // ==================================================
-        // INDICADOR DA COR
-        // ==================================================
-
+        // Indicador da cor
         Color corTurno;
 
         if (jogadorAtual == BRANCA)
         {
-            corTurno = Color{
-                242,
-                235,
-                216,
-                255
-            };
+            corTurno = Color{242, 235, 216, 255};
         }
         else
         {
-            corTurno = Color{
-                42,
-                40,
-                38,
-                255
-            };
+            corTurno = Color{42, 40, 38, 255};
         }
 
         DrawCircle(
             (int)cardTurno.x + 38,
             (int)cardTurno.y + 63,
             18,
-            corTurno
-        );
+            corTurno);
 
         DrawCircleLines(
             (int)cardTurno.x + 38,
             (int)cardTurno.y + 63,
             18,
-            MADEIRA
-        );
+            MADEIRA);
 
-        string textoTurno;
-
-        if (jogadorAtual == BRANCA)
-        {
-            textoTurno = "Brancas";
-        }
-        else
-        {
-            textoTurno = "Pretas";
-        }
+        string textoTurno =
+            (jogadorAtual == BRANCA) ? "Brancas" : "Pretas";
 
         DrawText(
             textoTurno.c_str(),
             (int)cardTurno.x + 68,
             (int)cardTurno.y + 53,
             22,
-            Color{
-                77,
-                47,
-                27,
-                255
-            }
-        );
+            Color{77, 47, 27, 255});
 
         // ==================================================
-        // ÁREA DE INSTRUÇÃO
+        // INSTRUÇÕES
         // ==================================================
 
         DrawText(
             "COMO JOGAR",
             (int)painelLateralX + 35,
-            240,
-            15,
-            DOURADO
-        );
+            240, 15, DOURADO);
 
         DrawText(
             "1. Selecione uma peca",
             (int)painelLateralX + 35,
-            270,
-            15,
-            CREME
-        );
+            270, 15, CREME);
 
         DrawText(
             "2. Escolha o destino",
             (int)painelLateralX + 35,
-            296,
-            15,
-            CREME
-        );
+            296, 15, CREME);
 
         DrawText(
             "3. Realize sua jogada",
             (int)painelLateralX + 35,
-            322,
-            15,
-            CREME
-        );
+            322, 15, CREME);
 
-        // ==================================================
-        // LINHA DECORATIVA
-        // ==================================================
-
+        // Linha decorativa
         DrawLine(
             (int)painelLateralX + 35,
             365,
             (int)painelLateralX + 275,
             365,
-            Fade(DOURADO, 0.50f)
-        );
+            Fade(DOURADO, 0.50f));
 
         // ==================================================
-        // MENSAGEM
+        // STATUS
         // ==================================================
 
         DrawText(
             "STATUS",
             (int)painelLateralX + 35,
-            395,
-            15,
-            DOURADO
-        );
+            395, 15, DOURADO);
 
-        // Fundo da mensagem
         Rectangle areaMensagem = {
             painelLateralX + 35,
             425,
             240,
-            80
-        };
+            80};
 
         DrawRectangleRounded(
             areaMensagem,
-            0.08f,
-            10,
-            Fade(BLACK, 0.18f)
-        );
+            0.08f, 10,
+            Fade(BLACK, 0.18f));
 
         DrawText(
             mensagem.c_str(),
             (int)areaMensagem.x + 15,
             (int)areaMensagem.y + 18,
-            15,
-            CREME
-        );
+            15, CREME);
 
         // ==================================================
-        // TABULEIRO - SOMBRA
+        // TABULEIRO: SOMBRA
         // ==================================================
 
         DrawRectangle(
@@ -765,8 +608,7 @@ void telaJogo(const string &usuarioLogado)
             (int)inicioY + 12,
             (int)tamanhoTabuleiro,
             (int)tamanhoTabuleiro,
-            Fade(BLACK, 0.40f)
-        );
+            Fade(BLACK, 0.40f));
 
         // ==================================================
         // MOLDURA DE MADEIRA
@@ -775,145 +617,155 @@ void telaJogo(const string &usuarioLogado)
         float margemTabuleiro = 18.0f;
 
         DrawRectangleRounded(
-            {
-                inicioX - margemTabuleiro,
-                inicioY - margemTabuleiro,
-                tamanhoTabuleiro +
-                    margemTabuleiro * 2,
-                tamanhoTabuleiro +
-                    margemTabuleiro * 2
-            },
-            0.025f,
-            8,
-            MADEIRA
-        );
-
-        // ==================================================
-        // DETALHE DA MOLDURA
-        // ==================================================
+            {inicioX - margemTabuleiro,
+             inicioY - margemTabuleiro,
+             tamanhoTabuleiro + margemTabuleiro * 2,
+             tamanhoTabuleiro + margemTabuleiro * 2},
+            0.025f, 8,
+            MADEIRA);
 
         DrawRectangleRoundedLines(
-            {
-                inicioX - margemTabuleiro + 4,
-                inicioY - margemTabuleiro + 4,
-                tamanhoTabuleiro +
-                    margemTabuleiro * 2 - 8,
-                tamanhoTabuleiro +
-                    margemTabuleiro * 2 - 8
-            },
-            0.025f,
-            8,
-            MADEIRA_CLARA
-        );
+            {inicioX - margemTabuleiro + 4,
+             inicioY - margemTabuleiro + 4,
+             tamanhoTabuleiro + margemTabuleiro * 2 - 8,
+             tamanhoTabuleiro + margemTabuleiro * 2 - 8},
+            0.025f, 8,
+            MADEIRA_CLARA);
 
         // ==================================================
-        // TABULEIRO
+        // TABULEIRO E PEÇAS
         // ==================================================
 
         for (int linha = 0; linha < TABTAM; linha++)
         {
             for (int coluna = 0; coluna < TABTAM; coluna++)
             {
-                float x =
-                    inicioX +
-                    coluna * tamanhoCasa;
+                float x = inicioX + coluna * tamanhoCasa;
+                float y = inicioY + linha * tamanhoCasa;
 
-                float y =
-                    inicioY +
-                    linha * tamanhoCasa;
-
-                // ==========================================
-                // COR DA CASA
-                // ==========================================
-
-                Color corCasa;
-
-                if ((linha + coluna) % 2 == 0)
-                {
-                    corCasa = CASA_CLARA;
-                }
-                else
-                {
-                    corCasa = CASA_ESCURA;
-                }
+                // Cor da casa
+                Color corCasa =
+                    ((linha + coluna) % 2 == 0)
+                    ? CASA_CLARA
+                    : CASA_ESCURA;
 
                 DrawRectangle(
                     (int)x,
                     (int)y,
                     (int)tamanhoCasa + 1,
                     (int)tamanhoCasa + 1,
-                    corCasa
-                );
+                    corCasa);
 
-                // ==========================================
-                // CASA SELECIONADA
-                // ==========================================
-
+                // Casa selecionada
                 if (
                     pecaSelecionada &&
                     linha == linhaInicial &&
-                    coluna == colunaInicial
-                )
+                    coluna == colunaInicial)
                 {
                     DrawRectangle(
                         (int)x,
                         (int)y,
                         (int)tamanhoCasa,
                         (int)tamanhoCasa,
-                        Fade(DOURADO, 0.30f)
-                    );
+                        Fade(DOURADO, 0.30f));
 
                     DrawRectangleLinesEx(
-                        {
-                            x + 4,
-                            y + 4,
-                            tamanhoCasa - 8,
-                            tamanhoCasa - 8
-                        },
+                        {x + 4, y + 4,
+                         tamanhoCasa - 8,
+                         tamanhoCasa - 8},
                         5,
-                        DOURADO
-                    );
+                        DOURADO);
                 }
 
-                // ==========================================
-                // CASA SOB O MOUSE
-                // ==========================================
-
+                // Realce da casa sob o mouse
                 if (
                     mouse.x >= x &&
                     mouse.x < x + tamanhoCasa &&
                     mouse.y >= y &&
-                    mouse.y < y + tamanhoCasa
-                )
+                    mouse.y < y + tamanhoCasa)
                 {
                     DrawRectangle(
                         (int)x,
                         (int)y,
                         (int)tamanhoCasa,
                         (int)tamanhoCasa,
-                        Fade(WHITE, 0.08f)
-                    );
+                        Fade(WHITE, 0.08f));
                 }
 
-                // ==========================================
-                // PEÇA
-                // ==========================================
+                // Durante a animação, não desenha a peça
+                // na posição original. Ela será desenhada
+                // separadamente na posição interpolada.
+                bool ehOrigemAnimada =
+                    animandoMaquina &&
+                    linha == jogadaMaquina.linhaInicial &&
+                    coluna == jogadaMaquina.colunaInicial;
 
-                if (tabuleiro[linha][coluna].ocupada)
+                if (
+                    tabuleiro[linha][coluna].ocupada &&
+                    !ehOrigemAnimada)
                 {
                     Vector2 centro = {
                         x + tamanhoCasa / 2.0f,
-                        y + tamanhoCasa / 2.0f
-                    };
+                        y + tamanhoCasa / 2.0f};
 
                     desenharPeca(
                         tabuleiro[linha][coluna],
                         centro.x,
                         centro.y,
-                        tamanhoCasa * 0.35f
-                    );
+                        tamanhoCasa * 0.35f);
                 }
             }
+        }
+
+        // ==================================================
+        // ANIMAÇÃO: DESENHA A PEÇA EM MOVIMENTO
+        // ==================================================
+
+        if (animandoMaquina)
+        {
+            // Progresso entre 0.0 e 1.0
+            float progresso =
+                tempoAnimacao / duracaoAnimacao;
+
+            if (progresso > 1.0f)
+            {
+                progresso = 1.0f;
+            }
+
+            // Centro da casa inicial
+            float xInicial =
+                inicioX +
+                jogadaMaquina.colunaInicial * tamanhoCasa +
+                tamanhoCasa / 2.0f;
+
+            float yInicial =
+                inicioY +
+                jogadaMaquina.linhaInicial * tamanhoCasa +
+                tamanhoCasa / 2.0f;
+
+            // Centro da casa final
+            float xFinal =
+                inicioX +
+                jogadaMaquina.colunaFinal * tamanhoCasa +
+                tamanhoCasa / 2.0f;
+
+            float yFinal =
+                inicioY +
+                jogadaMaquina.linhaFinal * tamanhoCasa +
+                tamanhoCasa / 2.0f;
+
+            // Interpolação da posição ao longo do tempo
+            float centroX =
+                xInicial + (xFinal - xInicial) * progresso;
+
+            float centroY =
+                yInicial + (yFinal - yInicial) * progresso;
+
+            desenharPeca(
+                pecaAnimada,
+                centroX,
+                centroY,
+                tamanhoCasa * 0.35f);
         }
 
         // ==================================================
@@ -922,38 +774,21 @@ void telaJogo(const string &usuarioLogado)
 
         for (int i = 0; i < 8; i++)
         {
-            string numero =
-                to_string(i);
+            string numero = to_string(i);
 
             DrawText(
                 numero.c_str(),
-                (int)(
-                    inicioX - 13
-                ),
-                (int)(
-                    inicioY +
-                    i * tamanhoCasa +
-                    30
-                ),
+                (int)(inicioX - 13),
+                (int)(inicioY + i * tamanhoCasa + 30),
                 14,
-                CREME
-            );
+                CREME);
 
             DrawText(
                 numero.c_str(),
-                (int)(
-                    inicioX +
-                    i * tamanhoCasa +
-                    30
-                ),
-                (int)(
-                    inicioY +
-                    tamanhoTabuleiro +
-                    5
-                ),
+                (int)(inicioX + i * tamanhoCasa + 30),
+                (int)(inicioY + tamanhoTabuleiro + 5),
                 14,
-                CREME
-            );
+                CREME);
         }
 
         // ==================================================
@@ -964,8 +799,7 @@ void telaJogo(const string &usuarioLogado)
             botaoVoltar,
             "Voltar ao menu",
             MADEIRA,
-            hoverVoltar
-        );
+            hoverVoltar);
 
         // ==================================================
         // RODAPÉ
@@ -976,8 +810,7 @@ void telaJogo(const string &usuarioLogado)
             30,
             alturaTela - 25,
             13,
-            Fade(WHITE, 0.55f)
-        );
+            Fade(WHITE, 0.55f));
 
         EndDrawing();
     }
