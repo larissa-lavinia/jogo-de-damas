@@ -1,3 +1,4 @@
+
 #include <raylib.h>
 
 #include "inicio.h"
@@ -16,10 +17,6 @@ void desenharBotaoInicio(
     int tamanhoTexto = 22
 )
 {
-    // ------------------------------------------------------
-    // SOMBRA
-    // ------------------------------------------------------
-
     DrawRectangleRounded(
         {
             botao.x + 4,
@@ -31,10 +28,6 @@ void desenharBotaoInicio(
         12,
         Fade(BLACK, 0.25f)
     );
-
-    // ------------------------------------------------------
-    // COR DO BOTÃO
-    // ------------------------------------------------------
 
     Color corBotao = cor;
 
@@ -55,20 +48,12 @@ void desenharBotaoInicio(
         corBotao
     );
 
-    // ------------------------------------------------------
-    // BORDA
-    // ------------------------------------------------------
-
     DrawRectangleRoundedLines(
         botao,
         0.20f,
         12,
         Fade(WHITE, 0.15f)
     );
-
-    // ------------------------------------------------------
-    // TEXTO CENTRALIZADO
-    // ------------------------------------------------------
 
     int larguraTexto =
         MeasureText(texto, tamanhoTexto);
@@ -94,7 +79,7 @@ void desenharBotaoInicio(
 // TELA INICIAL
 // ==========================================================
 
-OpcaoInicio inicio()
+OpcaoInicio inicio(bool temPartidaSalva)
 {
     while (!WindowShouldClose())
     {
@@ -107,6 +92,7 @@ OpcaoInicio inicio()
 
         // ==================================================
         // CARD PRINCIPAL
+        // Mantendo as dimensões e o posicionamento originais
         // ==================================================
 
         float larguraCard = 520.0f;
@@ -122,14 +108,14 @@ OpcaoInicio inicio()
         // BOTÕES
         // ==================================================
 
-        Rectangle botaoCadastro = {
+        Rectangle botaoNovaPartida = {
             cardX + 70,
             cardY + 185,
             380,
             60
         };
 
-        Rectangle botaoLogin = {
+        Rectangle botaoContinuar = {
             cardX + 70,
             cardY + 260,
             380,
@@ -149,16 +135,16 @@ OpcaoInicio inicio()
 
         Vector2 mouse = GetMousePosition();
 
-        bool hoverCadastro =
+        bool hoverNovaPartida =
             CheckCollisionPointRec(
                 mouse,
-                botaoCadastro
+                botaoNovaPartida
             );
 
-        bool hoverLogin =
+        bool hoverContinuar =
             CheckCollisionPointRec(
                 mouse,
-                botaoLogin
+                botaoContinuar
             );
 
         bool hoverSair =
@@ -173,19 +159,16 @@ OpcaoInicio inicio()
 
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
         {
-            // Cadastro
-            if (hoverCadastro)
+            if (hoverNovaPartida)
             {
-                return OpcaoInicio::CADASTRO;
+                return OpcaoInicio::NOVA_PARTIDA;
             }
 
-            // Login
-            if (hoverLogin)
+            if (hoverContinuar && temPartidaSalva)
             {
-                return OpcaoInicio::LOGIN;
+                return OpcaoInicio::CONTINUAR_PARTIDA;
             }
 
-            // Sair
             if (hoverSair)
             {
                 return OpcaoInicio::SAIR;
@@ -238,26 +221,15 @@ OpcaoInicio inicio()
             0,
             larguraTela,
             78,
-            Color{
-                77,
-                47,
-                27,
-                255
-            }
+            Color{77, 47, 27, 255}
         );
 
-        // Linha dourada
         DrawRectangle(
             0,
             76,
             larguraTela,
             4,
-            Color{
-                218,
-                158,
-                55,
-                255
-            }
+            Color{218, 158, 55, 255}
         );
 
         // ==================================================
@@ -269,12 +241,7 @@ OpcaoInicio inicio()
             35,
             18,
             36,
-            Color{
-                255,
-                225,
-                150,
-                255
-            }
+            Color{255, 225, 150, 255}
         );
 
         DrawText(
@@ -314,12 +281,7 @@ OpcaoInicio inicio()
             },
             0.04f,
             12,
-            Color{
-                247,
-                241,
-                226,
-                255
-            }
+            Color{247, 241, 226, 255}
         );
 
         // ==================================================
@@ -335,12 +297,7 @@ OpcaoInicio inicio()
             },
             0.04f,
             12,
-            Color{
-                218,
-                158,
-                55,
-                255
-            }
+            Color{218, 158, 55, 255}
         );
 
         // ==================================================
@@ -360,12 +317,7 @@ OpcaoInicio inicio()
             ),
             (int)cardY + 45,
             34,
-            Color{
-                77,
-                47,
-                27,
-                255
-            }
+            Color{77, 47, 27, 255}
         );
 
         // ==================================================
@@ -373,7 +325,7 @@ OpcaoInicio inicio()
         // ==================================================
 
         const char* subtitulo =
-            "Entre ou crie sua conta para jogar";
+            "Prepare-se para jogar damas";
 
         int larguraSubtitulo =
             MeasureText(subtitulo, 16);
@@ -386,12 +338,7 @@ OpcaoInicio inicio()
             ),
             (int)cardY + 95,
             16,
-            Color{
-                110,
-                100,
-                88,
-                255
-            }
+            Color{110, 100, 88, 255}
         );
 
         // ==================================================
@@ -403,24 +350,14 @@ OpcaoInicio inicio()
             (int)cardY + 140,
             (int)cardX + 190,
             (int)cardY + 140,
-            Color{
-                218,
-                158,
-                55,
-                255
-            }
+            Color{218, 158, 55, 255}
         );
 
         DrawCircle(
             (int)cardX + 260,
             (int)cardY + 140,
             5,
-            Color{
-                218,
-                158,
-                55,
-                255
-            }
+            Color{218, 158, 55, 255}
         );
 
         DrawLine(
@@ -428,45 +365,35 @@ OpcaoInicio inicio()
             (int)cardY + 140,
             (int)cardX + 450,
             (int)cardY + 140,
-            Color{
-                218,
-                158,
-                55,
-                255
-            }
+            Color{218, 158, 55, 255}
         );
 
         // ==================================================
-        // BOTÃO CADASTRO
+        // BOTÃO NOVA PARTIDA
         // ==================================================
 
         desenharBotaoInicio(
-            botaoCadastro,
-            "Criar conta",
-            Color{
-                35,
-                125,
-                82,
-                255
-            },
-            hoverCadastro,
+            botaoNovaPartida,
+            "Iniciar partida",
+            Color{35, 125, 82, 255},
+            hoverNovaPartida,
             22
         );
 
         // ==================================================
-        // BOTÃO LOGIN
+        // BOTÃO CONTINUAR
         // ==================================================
 
+        Color corContinuar =
+            temPartidaSalva
+                ? Color{52, 91, 126, 255}
+                : Color{130, 130, 130, 255};
+
         desenharBotaoInicio(
-            botaoLogin,
-            "Entrar",
-            Color{
-                52,
-                91,
-                126,
-                255
-            },
-            hoverLogin,
+            botaoContinuar,
+            "Continuar",
+            corContinuar,
+            hoverContinuar && temPartidaSalva,
             22
         );
 
@@ -477,12 +404,7 @@ OpcaoInicio inicio()
         desenharBotaoInicio(
             botaoSair,
             "Sair",
-            Color{
-                110,
-                82,
-                66,
-                255
-            },
+            Color{110, 82, 66, 255},
             hoverSair,
             18
         );
@@ -496,12 +418,7 @@ OpcaoInicio inicio()
             (int)cardX + 135,
             (int)cardY + 445,
             13,
-            Color{
-                130,
-                120,
-                105,
-                255
-            }
+            Color{130, 120, 105, 255}
         );
 
         EndDrawing();

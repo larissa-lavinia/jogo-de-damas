@@ -1,13 +1,14 @@
+
 #ifndef INICIO_H
 #define INICIO_H
 
 enum class OpcaoInicio
 {
-    SAIR,
-    CADASTRO,
-    LOGIN
+    NOVA_PARTIDA,
+    CONTINUAR_PARTIDA,
+    SAIR
 };
 
-OpcaoInicio inicio();
+OpcaoInicio inicio(bool temPartidaSalva);
 
 #endif

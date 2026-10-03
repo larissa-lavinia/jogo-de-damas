@@ -37,10 +37,10 @@ namespace Constantes
         const int RAIO = 30;
     }
 
-    namespace Db
-    {
-        const std::string ARQUIVO_USUARIO = "db/usuarios.dat";
-    }
+    // namespace Db
+    // {
+    //     const std::string ARQUIVO_USUARIO = "db/usuarios.dat";
+    // }
 }
 
 #endif

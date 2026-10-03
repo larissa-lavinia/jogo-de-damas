@@ -1,12 +1,9 @@
+
 #include <raylib.h>
-#include <string>
+#include <filesystem>
 
 #include "config/constantes.h"
-
 #include "screen/inicio.h"
-#include "screen/login.h"
-#include "screen/cadastro.h"
-#include "screen/menu.h"
 #include "screen/jogo.h"
 #include "audio/audio.h"
 
@@ -14,8 +11,6 @@ using namespace std;
 
 int main()
 {
-    string nomeUsuario = "";
-
     InitWindow(
         Constantes::Tela::LARGURA,
         Constantes::Tela::ALTURA,
@@ -29,77 +24,27 @@ int main()
 
     while (executando && !WindowShouldClose())
     {
-        // =========================
-        // TELA INICIAL
-        // =========================
+        bool temPartidaSalva =
+            filesystem::exists("db/partidas.dat");
 
-        OpcaoInicio opcao = inicio();
+        OpcaoInicio opcao = inicio(temPartidaSalva);
 
-        // =========================
-        // CADASTRO
-        // =========================
-
-        if (opcao == OpcaoInicio::CADASTRO)
+        switch (opcao)
         {
-            AcaoTelaCadastro resultadoCadastro = telaCadastro();
+            case OpcaoInicio::NOVA_PARTIDA:
+                telaJogo(false);
+                break;
 
-            if (resultadoCadastro == AcaoTelaCadastro::VOLTAR)
-            {
-                continue;
-            }
-        }
-
-        // =========================
-        // LOGIN
-        // =========================
-
-        else if (opcao == OpcaoInicio::LOGIN)
-        {
-            AcaoTelaLogin resultado = telaLogin(nomeUsuario);
-
-            if (resultado == AcaoTelaLogin::ENTRAR_MENU)
-            {
-                // =========================
-                // MENU
-                // =========================
-
-                bool dentroDoMenu = true;
-
-                while (dentroDoMenu && !WindowShouldClose())
+            case OpcaoInicio::CONTINUAR_PARTIDA:
+                if (temPartidaSalva)
                 {
-                    AcaoMenu acao = menu(nomeUsuario);
-
-                    if (acao == AcaoMenu::DESLOGAR)
-                    {
-                        dentroDoMenu = false;
-                        nomeUsuario = "";
-                    }
-
-                    else if (acao == AcaoMenu::NOVA_PARTIDA)
-                    {
-                        telaJogo(nomeUsuario);
-                    }
-
-                    else if (acao == AcaoMenu::CONTINUAR_PARTIDA)
-                    {
-                        // Implementaremos depois.
-                    }
-
-                    else if (acao == AcaoMenu::HISTORICO)
-                    {
-                        // Implementaremos depois.
-                    }
+                    telaJogo(true);
                 }
-            }
-        }
+                break;
 
-        // =========================
-        // SAIR
-        // =========================
-
-        else if (opcao == OpcaoInicio::SAIR)
-        {
-            executando = false;
+            case OpcaoInicio::SAIR:
+                executando = false;
+                break;
         }
     }
 

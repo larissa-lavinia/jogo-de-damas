@@ -1,8 +1,6 @@
-#ifndef SCREEN_JOGO_H
-#define SCREEN_JOGO_H
+#ifndef JOGO_H
+#define JOGO_H
 
-#include <string>
-
-void telaJogo(const std::string& usuarioLogado);
+void telaJogo(bool continuarPartida = false);
 
 #endif

@@ -1,9 +1,10 @@
+
 #include "jogo.h"
 #include "../audio/audio.h"
 #include "movimentos.h"
 #include "tabuleiro.h"
-#include <raylib.h>
-//emAndamento, pontosBrancas, pontosPretas, vezDoJogador
+
+// emAndamento, pontosBrancas, pontosPretas, vezDoJogador
 Partida partida = { false, 0, 0, BRANCA };
 
 void iniciarPartida()
@@ -24,8 +25,7 @@ bool realizarJogada(
     Cor jogador
 )
 {
-   
-    // Verifica se as posições estão dentro do tabuleiro
+    // Verifica se as posições estão dentro do tabuleiro.
     if (linhaInicial < 0 || linhaInicial >= TABTAM ||
         colunaInicial < 0 || colunaInicial >= TABTAM ||
         linhaFinal < 0 || linhaFinal >= TABTAM ||
@@ -34,19 +34,19 @@ bool realizarJogada(
         return false;
     }
 
-    // Verifica se existe uma peça na posição inicial
+    // Verifica se existe uma peça na posição inicial.
     if (!tabuleiro[linhaInicial][colunaInicial].ocupada)
     {
         return false;
     }
 
-    // Verifica se a peça pertence ao jogador da vez
+    // Verifica se a peça pertence ao jogador que está jogando.
     if (tabuleiro[linhaInicial][colunaInicial].cor != jogador)
     {
         return false;
     }
 
-    // Verifica se o movimento segue as regras
+    // Verifica se o movimento segue as regras.
     if (!validarJogada(
             tabuleiro,
             linhaInicial,
@@ -58,8 +58,7 @@ bool realizarJogada(
         return false;
     }
 
-    // Descobre se é captura ANTES de mover
-    // (depois do movimento a peça capturada já foi removida)
+    // Verifica se é uma captura antes de mover a peça.
     bool foiCaptura = podeCapturar(
         tabuleiro,
         linhaInicial,
@@ -68,7 +67,7 @@ bool realizarJogada(
         colunaFinal
     );
 
-    // Executa o movimento
+    // Executa o movimento.
     moverPeca(
         tabuleiro,
         linhaInicial,
@@ -92,20 +91,28 @@ bool realizarJogada(
         }
     }
 
-    // Encerra a partida se alguém chegou ao limite
+    // Verifica se a partida terminou.
     if (partidaFinalizada(partida))
     {
         partida.emAndamento = false;
     }
 
+    // Atualiza o jogador da próxima vez.
+    if (partida.emAndamento)
+    {
+        partida.vezDoJogador = (jogador == BRANCA)
+            ? PRETA
+            : BRANCA;
+    }
+
     return true;
-
-
 }
 
 int ganharPontos(const Partida& p, Cor jogador)
 {
-    return (jogador == BRANCA) ? p.pontosBrancas : p.pontosPretas;
+    return (jogador == BRANCA)
+        ? p.pontosBrancas
+        : p.pontosPretas;
 }
 
 bool partidaFinalizada(const Partida& p)
@@ -116,6 +123,7 @@ bool partidaFinalizada(const Partida& p)
 
 Cor vencedor(const Partida& p)
 {
-    return (p.pontosBrancas >= PONTOS_VITORIA) ? BRANCA : PRETA;
+    return (p.pontosBrancas >= PONTOS_VITORIA)
+        ? BRANCA
+        : PRETA;
 }
-
