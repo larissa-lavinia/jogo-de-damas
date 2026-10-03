@@ -8,6 +8,7 @@
 #include "screen/cadastro.h"
 #include "screen/menu.h"
 #include "screen/jogo.h"
+#include "audio/audio.h"
 
 using namespace std;
 
@@ -18,9 +19,10 @@ int main()
     InitWindow(
         Constantes::Tela::LARGURA,
         Constantes::Tela::ALTURA,
-        Constantes::Tela::TITULO
-    );
-
+        Constantes::Tela::TITULO);
+ 
+    InitAudioDevice();  
+     carregarSons();
     SetTargetFPS(Constantes::Tela::FPS);
 
     bool executando = true;
@@ -39,7 +41,12 @@ int main()
 
         if (opcao == OpcaoInicio::CADASTRO)
         {
-            telaCadastro();
+            AcaoTelaCadastro resultadoCadastro = telaCadastro();
+
+            if (resultadoCadastro == AcaoTelaCadastro::VOLTAR)
+            {
+                continue;
+            }
         }
 
         // =========================
@@ -96,6 +103,8 @@ int main()
         }
     }
 
+    descarregarSons();
+    CloseAudioDevice();  
     CloseWindow();
 
     return 0;

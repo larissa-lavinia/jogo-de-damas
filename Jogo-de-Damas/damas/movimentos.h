@@ -28,12 +28,18 @@ bool podeCapturar(
     int colunaFinal
 );
 
+bool existeCapturaDisponivel(
+    peca tabuleiro[TABTAM][TABTAM],
+    Cor jogador
+);
+
 bool validarJogada(
     peca tabuleiro[TABTAM][TABTAM],
     int linhaInicial,
     int colunaInicial,
     int linhaFinal,
-    int colunaFinal
+    int colunaFinal,
+    Cor jogador
 );
 
 #endif

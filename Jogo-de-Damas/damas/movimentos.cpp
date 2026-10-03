@@ -1,5 +1,6 @@
 #include "movimentos.h"
 #include <cmath>
+#include "../audio/audio.h"
 
 void moverPeca(
     peca tabuleiro[TABTAM][TABTAM],
@@ -87,11 +88,14 @@ void moverPeca(
         if (corPeca == BRANCA && linhaFinal == 7)
         {
             tornarDama(tabuleiro[linhaFinal][colunaFinal]);
+            tocarSomVirarDama();
+            
         }
 
         if (corPeca == PRETA && linhaFinal == 0)
         {
             tornarDama(tabuleiro[linhaFinal][colunaFinal]);
+            tocarSomVirarDama();
         }
     }
 }
@@ -336,11 +340,53 @@ bool podeCapturar(
     return false;
 }
 
-bool validarJogada(peca tabuleiro[TABTAM][TABTAM], int linhaInicial, int colunaInicial, int linhaFinal, int colunaFinal){
-    if (podeCapturar(tabuleiro, linhaInicial, colunaInicial, linhaFinal, colunaFinal))
-        return true;
-    else if (podeMoverSimples(tabuleiro, linhaInicial, colunaInicial, linhaFinal, colunaFinal))
-        return true;
+bool existeCapturaDisponivel(
+    peca tabuleiro[TABTAM][TABTAM],
+    Cor jogador
+)
+{
+    for (int lInicial = 0; lInicial < TABTAM; lInicial++)
+    {
+        for (int cInicial = 0; cInicial < TABTAM; cInicial++)
+        {
+            if (!tabuleiro[lInicial][cInicial].ocupada ||
+                tabuleiro[lInicial][cInicial].cor != jogador)
+            {
+                continue;
+            }
+
+            for (int lFinal = 0; lFinal < TABTAM; lFinal++)
+            {
+                for (int cFinal = 0; cFinal < TABTAM; cFinal++)
+                {
+                    if (podeCapturar(tabuleiro, lInicial, cInicial, lFinal, cFinal))
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+    }
 
     return false;
+}
+
+bool validarJogada(
+    peca tabuleiro[TABTAM][TABTAM],
+    int linhaInicial,
+    int colunaInicial,
+    int linhaFinal,
+    int colunaFinal,
+    Cor jogador
+)
+{
+    // Se existe captura no tabuleiro, o jogador é obrigado a capturar
+    if (existeCapturaDisponivel(tabuleiro, jogador))
+    {
+        return podeCapturar(tabuleiro, linhaInicial, colunaInicial,
+                            linhaFinal, colunaFinal);
+    }
+
+    return podeMoverSimples(tabuleiro, linhaInicial, colunaInicial,
+                            linhaFinal, colunaFinal);
 }
