@@ -1,4 +1,5 @@
 
+
 #include "jogo.h"
 
 #include <raylib.h>
@@ -236,13 +237,36 @@ void telaJogo(const string &usuarioLogado)
             botaoVoltar);
 
         // ==================================================
+        // POP-UP DE FIM DE PARTIDA (posição)
+        // ==================================================
+
+        bool fimDePartida =
+            !partida.emAndamento || partidaEncerrada;
+
+        Rectangle cardVitoria = {
+            larguraTela / 2.0f - 210,
+            alturaTela / 2.0f - 130,
+            420,
+            260};
+
+        Rectangle botaoVitoria = {
+            cardVitoria.x + 90,
+            cardVitoria.y + cardVitoria.height - 80,
+            240,
+            50};
+
+        bool hoverVitoria =
+            fimDePartida &&
+            CheckCollisionPointRec(mouse, botaoVitoria);
+
+        // ==================================================
         // CLIQUE DO MOUSE
         // ==================================================
 
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
         {
-            // Botão voltar
-            if (hoverVoltar)
+            // Botão voltar (ou botão do pop-up de fim de partida)
+            if (hoverVoltar || hoverVitoria)
             {
                 return;
             }
@@ -250,6 +274,7 @@ void telaJogo(const string &usuarioLogado)
             // A pessoa só pode jogar quando for sua vez.
             // Durante a animação, jogadorAtual é PRETA.
             if (
+                partida.emAndamento &&
                 !partidaEncerrada &&
                 !animandoMaquina &&
                 jogadorAtual == BRANCA &&
@@ -331,14 +356,18 @@ void telaJogo(const string &usuarioLogado)
 
                             mensagem = "A maquina esta pensando...";
 
-                            // Escolhe a jogada, mas ainda não
-                            // altera o tabuleiro.
-                            if (escolherJogadaMaquina(
+                            // Se a jogada da pessoa terminou a partida, a máquina não joga.
+                            if (!partida.emAndamento)
+                            {
+                                mensagem = "Fim da partida!";
+                            }
+
+                            // Escolhe a jogada, masnão altera o tabuleiro.
+                            else if (escolherJogadaMaquina(
                                     PRETA,
                                     jogadaMaquina))
                             {
-                                // Guarda uma cópia da peça para
-                                // desenhá-la durante a animação.
+                                // Guarda uma cópia da peça para desenhá-la durante a animação.
                                 pecaAnimada = tabuleiro[
                                     jogadaMaquina.linhaInicial]
                                     [jogadaMaquina.colunaInicial];
@@ -386,7 +415,15 @@ void telaJogo(const string &usuarioLogado)
                 if (maquinaJogou)
                 {
                     jogadorAtual = BRANCA;
-                    mensagem = "Sua vez! Selecione uma peca.";
+
+                    if (partida.emAndamento)
+                    {
+                        mensagem = "Sua vez! Selecione uma peca.";
+                    }
+                    else
+                    {
+                        mensagem = "Fim da partida!";
+                    }
                 }
                 else
                 {
@@ -600,6 +637,58 @@ void telaJogo(const string &usuarioLogado)
             15, CREME);
 
         // ==================================================
+        // PLACAR
+        // ==================================================
+
+        DrawText(
+            "PLACAR",
+            (int)painelLateralX + 35,
+            525, 15, DOURADO);
+
+        Rectangle areaPlacar = {
+            painelLateralX + 35,
+            550,
+            240,
+            50};
+
+        DrawRectangleRounded(
+            areaPlacar,
+            0.08f, 10,
+            Fade(BLACK, 0.18f));
+
+        // Brancas (metade esquerda)
+        DrawCircle(
+            (int)areaPlacar.x + 20,
+            (int)areaPlacar.y + 25,
+            9,
+            Color{245, 235, 216, 255});
+
+        DrawText(
+            TextFormat("Brancas: %d", ganharPontos(partida, BRANCA)),
+            (int)areaPlacar.x + 36,
+            (int)areaPlacar.y + 18,
+            14, CREME);
+
+        // Pretas (metade direita)
+        DrawCircle(
+            (int)areaPlacar.x + 140,
+            (int)areaPlacar.y + 25,
+            9,
+            Color{42, 40, 38, 255});
+
+        DrawCircleLines(
+            (int)areaPlacar.x + 140,
+            (int)areaPlacar.y + 25,
+            9,
+            Fade(WHITE, 0.40f));
+
+        DrawText(
+            TextFormat("Pretas: %d", ganharPontos(partida, PRETA)),
+            (int)areaPlacar.x + 156,
+            (int)areaPlacar.y + 18,
+            14, CREME);
+
+        // ==================================================
         // TABULEIRO: SOMBRA
         // ==================================================
 
@@ -811,6 +900,89 @@ void telaJogo(const string &usuarioLogado)
             alturaTela - 25,
             13,
             Fade(WHITE, 0.55f));
+
+        // ==================================================
+        // POP-UP DE FIM DE PARTIDA
+        // ==================================================
+
+        if (!partida.emAndamento || partidaEncerrada)
+        {
+            // Escurece o fundo
+            DrawRectangle(
+                0, 0,
+                larguraTela, alturaTela,
+                Fade(BLACK, 0.65f));
+
+            // Sombra e card
+            DrawRectangleRounded(
+                {cardVitoria.x + 5,
+                 cardVitoria.y + 6,
+                 cardVitoria.width,
+                 cardVitoria.height},
+                0.08f, 10,
+                Fade(BLACK, 0.35f));
+
+            DrawRectangleRounded(cardVitoria, 0.08f, 10, CREME);
+
+            DrawRectangleRoundedLines(
+                cardVitoria, 0.08f, 10, DOURADO);
+
+            Color corTextoEscuro = {77, 47, 27, 255};
+
+            // Subtítulo
+            const char *subtitulo = "FIM DA PARTIDA";
+
+            DrawText(
+                subtitulo,
+                (int)(cardVitoria.x +
+                      (cardVitoria.width - MeasureText(subtitulo, 14)) / 2),
+                (int)cardVitoria.y + 28,
+                14,
+                Color{110, 90, 70, 255});
+
+            // Vencedor
+            // Se a partida acabou por pontos, usa vencedor(partida).
+            // Se acabou porque a máquina ficou sem jogadas,
+            // a pessoa (brancas) venceu.
+            bool brancasVenceram =
+                partida.emAndamento
+                    ? true
+                    : (vencedor(partida) == BRANCA);
+
+            const char *titulo =
+                brancasVenceram
+                    ? "Brancas venceram!"
+                    : "Pretas venceram!";
+
+            DrawText(
+                titulo,
+                (int)(cardVitoria.x +
+                      (cardVitoria.width - MeasureText(titulo, 32)) / 2),
+                (int)cardVitoria.y + 65,
+                32,
+                corTextoEscuro);
+
+            // Placar final
+            const char *placarFinal = TextFormat(
+                "Brancas %d  x  %d Pretas",
+                ganharPontos(partida, BRANCA),
+                ganharPontos(partida, PRETA));
+
+            DrawText(
+                placarFinal,
+                (int)(cardVitoria.x +
+                      (cardVitoria.width - MeasureText(placarFinal, 20)) / 2),
+                (int)cardVitoria.y + 125,
+                20,
+                corTextoEscuro);
+
+            // Botão
+            desenharBotaoJogo(
+                botaoVitoria,
+                "Voltar ao menu",
+                MADEIRA,
+                hoverVitoria);
+        }
 
         EndDrawing();
     }
