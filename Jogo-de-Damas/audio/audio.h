@@ -10,18 +10,12 @@ struct sonsJogo{
     Sound erro;
 };
 
-
-
-
 void tocarSomMovimento();
 void tocarSomVitoria();
 void tocarSomVirarDama();
 void tocarSomErro();
 void carregarSons();
 void descarregarSons();
-
-
-
 
 #endif
 

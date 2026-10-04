@@ -17,6 +17,7 @@ void descarregarSons()
     UnloadSound(sons.movimento);
     UnloadSound(sons.virarDama);
     UnloadSound(sons.vitoria);
+    UnloadSound(sons.erro);
 }
 
 void tocarSomMovimento()

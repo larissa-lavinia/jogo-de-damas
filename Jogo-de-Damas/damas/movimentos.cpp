@@ -89,7 +89,7 @@ void moverPeca(
         {
             tornarDama(tabuleiro[linhaFinal][colunaFinal]);
             tocarSomVirarDama();
-            
+
         }
 
         if (corPeca == PRETA && linhaFinal == 0)
@@ -340,6 +340,35 @@ bool podeCapturar(
     return false;
 }
 
+// verifica se UMA peça específica pode capturar.
+bool existeCapturaDisponivel(
+    peca tabuleiro[TABTAM][TABTAM],
+    int linha,
+    int coluna
+)
+{
+    // posição fora do tabuleiro não tem captura
+    if (linha < 0 || linha >= TABTAM ||
+        coluna < 0 || coluna >= TABTAM)
+    {
+        return false;
+    }
+
+    for (int lFinal = 0; lFinal < TABTAM; lFinal++)
+    {
+        for (int cFinal = 0; cFinal < TABTAM; cFinal++)
+        {
+            if (podeCapturar(tabuleiro, linha, coluna, lFinal, cFinal))
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+// verifica se ALGUMA peça do jogador pode capturar.
 bool existeCapturaDisponivel(
     peca tabuleiro[TABTAM][TABTAM],
     Cor jogador
@@ -355,15 +384,9 @@ bool existeCapturaDisponivel(
                 continue;
             }
 
-            for (int lFinal = 0; lFinal < TABTAM; lFinal++)
+            if (existeCapturaDisponivel(tabuleiro, lInicial, cInicial))
             {
-                for (int cFinal = 0; cFinal < TABTAM; cFinal++)
-                {
-                    if (podeCapturar(tabuleiro, lInicial, cInicial, lFinal, cFinal))
-                    {
-                        return true;
-                    }
-                }
+                return true;
             }
         }
     }

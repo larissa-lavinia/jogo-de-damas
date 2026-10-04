@@ -33,6 +33,12 @@ bool existeCapturaDisponivel(
     Cor jogador
 );
 
+bool existeCapturaDisponivel(
+    peca tabuleiro[TABTAM][TABTAM],
+    int linha,
+    int coluna
+);
+
 bool validarJogada(
     peca tabuleiro[TABTAM][TABTAM],
     int linhaInicial,
