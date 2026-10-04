@@ -340,7 +340,7 @@ bool podeCapturar(
     return false;
 }
 
-// verifica se UMA peça específica pode capturar.
+// verifica se uma peça específica pode capturar.
 bool existeCapturaDisponivel(
     peca tabuleiro[TABTAM][TABTAM],
     int linha,
@@ -368,7 +368,7 @@ bool existeCapturaDisponivel(
     return false;
 }
 
-// verifica se ALGUMA peça do jogador pode capturar.
+// verifica se alguma peça do jogador pode capturar.
 bool existeCapturaDisponivel(
     peca tabuleiro[TABTAM][TABTAM],
     Cor jogador

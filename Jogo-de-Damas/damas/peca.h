@@ -15,9 +15,6 @@ struct peca{
 
 void tornarDama(peca& p);
 
-bool operator==(const peca& a, const peca& b);
-bool operator!=(const peca& a, const peca& b);
-
 char caracterePeca(const peca& p);
 
 void imprimirPeca(const peca& p);

@@ -9,19 +9,6 @@ void tornarDama(peca& p)
     p.tipo = DAMA;
 }
 
-bool operator==(const peca& a, const peca& b)
-{
-    return a.cor == b.cor &&
-           a.tipo == b.tipo &&
-           a.linha == b.linha &&
-           a.coluna == b.coluna;
-}
-
-bool operator!=(const peca& a, const peca& b)
-{
-    return !(a == b);
-}
-
 char caracterePeca(const peca& p)
 {
     if (p.cor == BRANCA && p.tipo == NORMAL)
