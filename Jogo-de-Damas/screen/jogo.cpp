@@ -412,7 +412,7 @@ void telaJogo(bool continuarPartida)
                             {
                                 excluirPartidaSalva();
                                 mensagem = "Fim da partida!";
-                                tocarSomVitoria();
+                                tocarSomVitoria(BRANCA);
                             }
                             else
                             {
@@ -438,7 +438,7 @@ void telaJogo(bool continuarPartida)
                                 {
                                     mensagem =
                                         "Voce venceu! A maquina nao tem jogadas.";
-                                tocarSomVitoria();
+                                    tocarSomVitoria();
                                     partidaEncerrada = true;
                                     excluirPartidaSalva();
                                 }
@@ -491,7 +491,7 @@ void telaJogo(bool continuarPartida)
                     {
                         excluirPartidaSalva();
                         mensagem = "Fim da partida!";
-                        tocarSomVitoria();
+                        tocarSomVitoria(PRETA);
                     }
                 }
                 else

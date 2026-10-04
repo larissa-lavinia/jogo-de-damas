@@ -37,10 +37,10 @@
 			<Add option="-Wall" />
 			<Add option="-std=c++17" />
 			<Add option="-fexceptions" />
-			<Add directory="raylib/include" />
+			<Add directory="config/raylib/include" />
 		</Compiler>
 		<Linker>
-			<Add library="raylib/lib/windows/libraylib.a" />
+			<Add library="config/raylib/lib/windows/libraylib.a" />
 			<Add library="m" />
 			<Add library="pthread" />
 			<Add library="dl" />
@@ -61,19 +61,15 @@
 		<Unit filename="damas/peca.h" />
 		<Unit filename="damas/tabuleiro.cpp" />
 		<Unit filename="damas/tabuleiro.h" />
-		<Unit filename="main.cpp" />
-		<Unit filename="screen/cadastro.cpp" />
-		<Unit filename="screen/cadastro.h" />
+		<Unit filename="damas/salvamento.cpp" />
+		<Unit filename="damas/salvamento.h" />
+
+		<Unit filename="main.cpp" /> 
+
 		<Unit filename="screen/inicio.cpp" />
 		<Unit filename="screen/inicio.h" />
 		<Unit filename="screen/jogo.cpp" />
 		<Unit filename="screen/jogo.h" />
-		<Unit filename="screen/login.cpp" />
-		<Unit filename="screen/login.h" />
-		<Unit filename="screen/menu.cpp" />
-		<Unit filename="screen/menu.h" />
-		<Unit filename="usuario/usuario.cpp" />
-		<Unit filename="usuario/usuario.h" />
 		<Extensions />
 	</Project>
 </CodeBlocks_project_file>
